@@ -9,6 +9,7 @@ decompiled types in `src/Assembly-CSharp/` to how the system actually works.
 | [CHARACTER_AI_JOBS.md](CHARACTER_AI_JOBS.md) | Behaviour selection → Jobs → GOAP planning → action execution; Interrupts & Traits |
 | [WORLD_MODEL.md](WORLD_MODEL.md) | GridMap → Region → Area → InnerTileMap → LocationGridTile → TileObject; structures, settlements, factions |
 | [SAVE_FORMAT.md](SAVE_FORMAT.md) | `.zip` save layout, `SaveData<T>` tree, two-phase load, FullSerializer + SQLite-for-logs |
+| [ASSETS.md](ASSETS.md) | Where content lives (assets/resources/scenes) and how to extract it from your own install |
 
 Cross-cutting facts:
 - Everything the AI targets is an `IPointOfInterest` (`POI_TYPE`): characters,

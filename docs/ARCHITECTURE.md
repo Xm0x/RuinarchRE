@@ -109,8 +109,9 @@ always keeping behavior identical and diffable against `reference/`.
 - **M4: Documented**: every major system in §3 has a `docs/systems/*.md`.
 - **M5: Clean source**: names/comments restored to human-authored quality; tree
   reads like the original repo would.
-- **M6: Mod loader**: a first-class loader baked into the source, with Harmony
-  patching (see `docs/MODLOADER.md`).
+- **M6: Mod loader**: shipped as its own project,
+  [RuinarchModLoader](https://github.com/Xm0x/RuinarchModLoader) (a patcher that
+  installs a Harmony-based loader into the game's own assembly).
 
 "100% RE" = **M3 + M4** (functionally-equivalent buildable source plus full
-system docs). M5 is the polish pass; M6 makes it moddable.
+system docs). M5 is the polish pass; M6 (a separate project) makes it moddable.

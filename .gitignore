@@ -9,6 +9,8 @@
 
 # raw ilspycmd baseline (regenerate via tools/decompile.sh)
 reference/
+# raw AssetRipper export (regenerate via tools/extract-assets.sh)
+reference-assets/
 # compiled DLLs (tools/build.sh output)
 build/
 # hardlinked game copy for drop-in verify

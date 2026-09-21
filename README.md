@@ -28,23 +28,24 @@ Edit `tools/env.sh` if your Ruinarch install path differs.
 - [x] M3: behavior-verified across a full scenario *(playtested, no issues)*
 - [x] M4: all major systems documented ([docs/systems/](docs/systems/))
 - [x] M5: structured control flow, edit/build/run dev loop ([docs/MODDING.md](docs/MODDING.md))
-- [x] M6: first-class mod loader ([docs/MODLOADER.md](docs/MODLOADER.md))
+- [x] M6: mod loader shipped as its own project ([RuinarchModLoader](https://github.com/Xm0x/RuinarchModLoader))
 
 | Path | What |
 |---|---|
 | `tools/` | decompile, build, and verify scripts |
 | `src/` | organized, buildable game source (the deliverable) |
-| `examples/` | reference mod for the built-in loader |
-| `reference/` | raw ilspycmd baseline (gitignored; regenerate locally) |
 | `docs/` | architecture and per-system deep dives |
+| `reference/` | raw ilspycmd baseline (gitignored; regenerate locally) |
+| `tools/extract-assets.sh` | optional asset extraction (run on your own install) |
 
 ## Modding
 
-A mod loader is baked into the recompiled source, so there is no external
-injector. Drop a DLL in `Mods/` and it loads before the first scene, with
-[Harmony](https://github.com/pardeike/Harmony) runtime patching (verified under
-Proton/Wine and Mono). Copy `examples/ExampleMod/` to start. Full guide:
-[`docs/MODLOADER.md`](docs/MODLOADER.md).
+Modding lives in a separate project, **[RuinarchModLoader](https://github.com/Xm0x/RuinarchModLoader)**.
+It ships a patcher that installs a mod loader into your own `Assembly-CSharp.dll`
+(stock game or this rebuild), with [Harmony](https://github.com/pardeike/Harmony)
+runtime patching. Keeping it separate keeps this repo focused on faithful source
+restoration. Because the game's names are intact here, this source is the
+reference a modder reads to find exactly what to patch.
 
 See [`docs/ARCHITECTURE.md`](docs/ARCHITECTURE.md) for the full strategy,
 toolchain, and milestone definitions.
