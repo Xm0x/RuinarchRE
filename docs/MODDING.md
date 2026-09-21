@@ -19,7 +19,7 @@ first deploy backs up the stock DLLs as `*.dll.orig`.
 
 | command | target |
 |---|---|
-| `tools/deploy.sh` | `testgame/` — the safe copy (default) |
+| `tools/deploy.sh` | `testgame/`: the safe copy (default) |
 | `tools/deploy.sh --target DIR` | any Ruinarch dir you point at |
 | `tools/deploy.sh --install` | your **real** Steam install (asks for `yes`) |
 | `tools/deploy.sh --restore` | put the stock DLLs back, remove ours |
@@ -66,9 +66,9 @@ testprefix/pfx/drive_c/users/steamuser/AppData/LocalLow/Maccima Games/Ruinarch/P
 
 `grep -iE 'exception|NullReference' <that path>` after a run surfaces managed-code
 crashes. A healthy fully-loaded game sits around ~1.5-1.8 GB RSS and burns CPU
-(the simulation thread) — that, plus a menu on screen, is "it works".
+(the simulation thread). That, plus a menu on screen, is "it works".
 
-## Making a change — worked example
+## Making a change: worked example
 
 1. Find the code. Types keep their original names, so `grep` works well, and the
    [`docs/systems/`](systems/) deep-dives map each subsystem to its files.
@@ -81,7 +81,7 @@ crashes. A healthy fully-loaded game sits around ~1.5-1.8 GB RSS and burns CPU
 ## Naming cleanup as you go
 
 Locals still carry decompiler-generic names (`num`, `flag`, `text`, `list`).
-Rename them **per method as you touch it** — that keeps diffs meaningful and
+Rename them **per method as you touch it**, which keeps diffs meaningful and
 avoids a risky project-wide sweep. Real type/method/field names are already
 intact, so navigation doesn't need it.
 

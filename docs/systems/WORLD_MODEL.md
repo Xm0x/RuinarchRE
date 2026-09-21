@@ -1,6 +1,6 @@
 # World Model & Map
 
-How Ruinarch represents its world — a **layered grid hierarchy** from the
+How Ruinarch represents its world, a **layered grid hierarchy** from the
 overworld down to individual tiles and the objects on them. Paths relative to
 `src/Assembly-CSharp/`.
 
@@ -24,45 +24,45 @@ Fixed dimension: **each Area = 14×14 LocationGridTiles** (196 tiles).
 `InnerMapManager.AreaLocationGridTileSize = (14,14)`; structure placement grid
 `BuildingSpotSize = (7,7)`.
 
-## Layer 0 — `GridMap.cs`
+## Layer 0: `GridMap.cs`
 Singleton world container. Holds `Area[,]` (the overworld grid), `width`/`height`.
 `SetMap(Area[,])` populates it; `GetFirstPassableGridTile` /
 `GetFirstPassableUnoccupiedGridTile` are common queries.
 
-## Layer 1 — `Region.cs`
+## Layer 1: `Region.cs`
 A territorial region aggregating Areas and holding the detailed map:
 - `List<Area> areas`, `Area coreTile` (representative area).
-- `RegionInnerTileMap _regionInnerTileMap` — the detailed grid.
-- `Dictionary<STRUCTURE_TYPE, List<LocationStructure>> structures` — buildings by
+- `RegionInnerTileMap _regionInnerTileMap`, the detailed grid.
+- `Dictionary<STRUCTURE_TYPE, List<LocationStructure>> structures`, buildings by
   type (the primary structure query index).
 - `List<BaseSettlement> settlementsInRegion`, `List<Faction> factionsHere`,
   residents / `charactersAtLocation`.
 
-## Layer 2 — `Area.cs`
+## Layer 2: `Area.cs`
 One overworld hex tile. `AreaData (x, y, ID)`, `Region region`,
 `List<BaseSettlement> settlementsOnArea`. Behavior split into components:
-- `AreaGridTileComponent` — its 14×14 tile block, `centerGridTile`, border tiles.
-- `AreaStructureComponent` — structures occupying this area.
+- `AreaGridTileComponent`, its 14×14 tile block, `centerGridTile`, border tiles.
+- `AreaStructureComponent`, structures occupying this area.
 - `AreaTileObjectComponent`, `AreaBiomeComponent`, `AreaElevationComponent`,
   `AreaFeatureComponent`.
-- `PopulateAreasInRange()` — neighborhood queries.
+- `PopulateAreasInRange()`, neighborhood queries.
 
-## Layer 3 — `Inner_Maps/InnerTileMap.cs` + `RegionInnerTileMap.cs`
+## Layer 3: `Inner_Maps/InnerTileMap.cs` + `RegionInnerTileMap.cs`
 `InnerTileMap` (abstract) holds `LocationGridTile[,] map`,
 `List<LocationGridTile> allTiles`, the `GridGraph` pathfinding graph, and drives
 Unity `Tilemap` rendering layers (ground/details/elevation/shore) plus Perlin
 noise for elevation/precipitation and biome/temperature gradients.
 
 `RegionInnerTileMap` (concrete) generation entry points are **coroutines**:
-- `GenerateMap()` (new world) / `LoadMap()` (from save) — `IEnumerator`s.
+- `GenerateMap()` (new world) / `LoadMap()` (from save), `IEnumerator`s.
 - `GetInnerMapSizeGivenRegionDimensions()` = region area-span × (14×14).
 - `PopulateNeededAreaDataAfterGridGeneration()` wires each `Area`'s
   `centerGridTile`.
 
-## Layer 4 — `Inner_Maps/LocationGridTile.cs`
+## Layer 4: `Inner_Maps/LocationGridTile.cs`
 One cell. Key state:
 - `localPlace` (Vector3Int), `worldLocation` / `centeredWorldLocation`.
-- `tileType` (Empty / Wall — blocking), `tileState` (Empty / Occupied — affects
+- `tileType` (Empty / Wall, blocking), `tileState` (Empty / Occupied, affects
   pathfinding), `groundType` (Soil/Grass/Stone/Water_*/Sand/Magma/Corrupted/…),
   `mainBiomeType` (`BIOMES`), `elevationType` (`ELEVATION`).
 - `structure` (owning `LocationStructure`), `parentMap`, `area`, `neighbourList`
@@ -70,7 +70,7 @@ One cell. Key state:
 - Components: `GridTileCorruptionComponent`, `GridTileMouseEventsComponent`,
   `GridTileTileObjectComponent`, `GridTileEventDispatcher`.
 
-## Layer 5 — tile contents — `GridTileTileObjectComponent.cs`
+## Layer 5: tile contents: `GridTileTileObjectComponent.cs`
 Manages what sits on a tile:
 - `objHere` (main occupant), `hiddenObjHere` (traps/fog), `genericTileObject`,
   `walls` (`List<ThinWall>`), trap flags (`hasLandmine`/`hasFreezingTrap`/
@@ -78,11 +78,11 @@ Manages what sits on a tile:
 - `SetObjectHere()` (place + update passability), `LoadObjectHere()` (from save),
   `RemoveObjectHere()` (destroy), `RemoveObjectHereWithoutDestroying()` (move).
 
-## Structures — `Inner_Maps/Location_Structures/LocationStructure.cs`
+## Structures: `Inner_Maps/Location_Structures/LocationStructure.cs`
 A building/dungeon spanning many tiles:
 - `structureType` (`STRUCTURE_TYPE`), `HashSet<LocationGridTile> tiles`,
   `List<LocationGridTile> passableTiles`.
-- `groupedTileObjects` `Dictionary<TILE_OBJECT_TYPE, List<TileObject>>` — the
+- `groupedTileObjects` `Dictionary<TILE_OBJECT_TYPE, List<TileObject>>`, the
   in-structure object index.
 - `settlementLocation` (owning `BaseSettlement`), `region`, `rooms`
   (`StructureRoom[]`), `maxHP`/`currentHP`, `residents`, `pointsOfInterest`.
@@ -90,7 +90,7 @@ A building/dungeon spanning many tiles:
   `Wilderness`, + 80+ concrete types (Tavern, Farm, Mine, Barracks, MageTower,
   VampireCastle, NecromancerLair, …).
 
-## Objects — `TileObject.cs`
+## Objects: `TileObject.cs`
 Items/decorations/resources on tiles:
 - `tileObjectType` (`TILE_OBJECT_TYPE`, 300+ values), `gridTileLocation`,
   `maxHP`/`currentHP`, `characterOwner`, `isPreplaced`, `persistentID`,
@@ -101,9 +101,9 @@ Items/decorations/resources on tiles:
   `StructureObject`, `MonsterSpawner`, trap objects, etc.
 
 Note: `TileObject`, characters, and structures are all **points of interest**
-(`IPointOfInterest` / `POI_TYPE`) — a unifying interface the AI targets.
+(`IPointOfInterest` / `POI_TYPE`), a unifying interface the AI targets.
 
-## Settlements — `Locations/Settlements/BaseSettlement.cs`
+## Settlements: `Locations/Settlements/BaseSettlement.cs`
 - `locationType` (`LOCATION_TYPE`), `owner` (`Faction`, null = neutral),
   `List<Area> areas` (can span several), `structures` dict, `allStructures`,
   `residents`, `parties`.
@@ -111,7 +111,7 @@ Note: `TileObject`, characters, and structures are all **points of interest**
 - Subclasses: `PlayerSettlement` (the player's demonic base), `NPCSettlement`
   (village/dungeon variants: Human_Village, Elven_Hamlet, …).
 
-## Factions — `Faction.cs`
+## Factions: `Faction.cs`
 - `factionType` (`FACTION_TYPE`), `race` (`RACE`),
   `List<BaseSettlement> ownedSettlements`, `List<Character> characters`,
   `Dictionary<Faction, FactionRelationship> relationships` (war/peace/alliance).
@@ -121,16 +121,16 @@ Note: `TileObject`, characters, and structures are all **points of interest**
 - `JoinFaction()` / `LeaveFaction()` and ideology/banning join checks.
 
 ## Managers
-- **`LandmarkManager.cs`** — world structure creation + queries.
+- **`LandmarkManager.cs`**, world structure creation + queries.
   `GenerateRegionMap(Region, MapGenerationComponent)` coroutine:
   instantiate `RegionInnerTileMap` → `Initialize()` (Perlin seeds) →
   `region.GenerateStructures()` → `innerTileMap.GenerateMap()` →
   `InnerMapManager.OnCreateInnerMap()`.
   Also `CreateNewSettlement(...)`, `GetStructuresOfType(...)`,
   `wildernessMonsterSpawnerData` (`Dictionary<BIOMES, WildernessMonsterSpawnerData[]>`).
-- **`Inner_Maps/InnerMapManager.cs`** — display/input layer.
+- **`Inner_Maps/InnerMapManager.cs`**, display/input layer.
   `currentlyShowingMap`/`currentlyShowingLocation`, `innerMaps` list,
-  pathfinding tag map (Ground=1, Obstacle=2, faction doors 4–16, Roads=17,
+  pathfinding tag map (Ground=1, Obstacle=2, faction doors 4-16, Roads=17,
   Caves=18, Special_Structures=19), `GetTileFromMousePosition()`,
   `OnClickMapObject()`.
 

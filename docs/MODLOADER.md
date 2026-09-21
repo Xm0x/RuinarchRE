@@ -9,7 +9,7 @@ There are two ways to change Ruinarch in this project:
 
 The mod loader is a first-class system baked into our `Assembly-CSharp` source
 (`src/Assembly-CSharp/Modding/`). Because we own the source, the loader is part
-of the game itself — no external injector, no `winhttp.dll` proxy, no BepInEx.
+of the game itself, with no external injector, no `winhttp.dll` proxy, no BepInEx.
 Drop a DLL in `Mods/` and it loads.
 
 ## How it boots
@@ -19,7 +19,7 @@ are in place before the game code they target ever executes.
 
 - **Primary:** a C# **module initializer** (`[ModuleInitializer]` on
   `ModLoader.ModuleInit`). Roslyn emits the call into `<Module>.cctor`, which the
-  Mono runtime runs the instant it loads `Assembly-CSharp` — the earliest
+  Mono runtime runs the instant it loads `Assembly-CSharp`, the earliest
   managed entry point there is. This is what makes the loader fire even though
   it's injected post-build.
   - `net4.x` mscorlib predates `ModuleInitializerAttribute` (added in .NET 5), so
@@ -29,7 +29,7 @@ are in place before the game code they target ever executes.
 - **Fallback:** `[RuntimeInitializeOnLoadMethod(BeforeSceneLoad)]` on
   `ModLoader.Initialize`, for the case where the game is rebuilt from a Unity
   project (which regenerates `RuntimeInitializeOnLoads.json`). `Initialize()` is
-  idempotent — both firing is harmless.
+  idempotent, so both firing is harmless.
 
 ## The `Mods/` folder
 
@@ -48,7 +48,7 @@ Mods/
 
 Discovery scans every `*.dll` directly in `Mods/` **plus one level of
 subfolders** (`Mods/MyMod/MyMod.dll`). A DLL that exposes no `IRuinarchMod`
-implementation (e.g. `0Harmony.dll`) is inspected and skipped — dependencies and
+implementation (e.g. `0Harmony.dll`) is inspected and skipped, so dependencies and
 mods can share the folder.
 
 **Isolation:** a mod that throws while loading is caught, logged, and skipped. It
@@ -59,7 +59,7 @@ drop its own dependencies anywhere under `Mods/` and have them resolve.
 
 Everything lives in the `Ruinarch.Modding` namespace.
 
-### `IRuinarchMod` — the entry point
+### `IRuinarchMod`: the entry point
 
 Implement on exactly one public, parameterless-constructible class. The loader
 instantiates it and calls `OnLoad` once.
@@ -71,7 +71,7 @@ public interface IRuinarchMod
 }
 ```
 
-### `ModContext` — what you're handed
+### `ModContext`: what you're handed
 
 ```csharp
 public sealed class ModContext
@@ -83,7 +83,7 @@ public sealed class ModContext
 }
 ```
 
-### `ModInfo` — `mod.json`
+### `ModInfo`: `mod.json`
 
 Optional file next to the DLL. Any missing field falls back to a default derived
 from the DLL name. Parsed with Unity's `JsonUtility` (no external JSON dep).
@@ -98,7 +98,7 @@ from the DLL name. Parsed with Unity's `JsonUtility` (no external JSON dep).
 }
 ```
 
-### `ModLogger` — logging
+### `ModLogger`: logging
 
 `Logger.Info/Warning/Error` write to Unity's `Player.log` (prefixed with the mod
 id) **and** append to `Mods/mods.log`. Use `mods.log` for iteration: Unity
@@ -134,7 +134,7 @@ static class Character_Death_Patch
 ```
 
 Harmony runtime detours are **verified working** under Proton/Wine + Mono
-(Unity 2020.3) — see the self-test in `examples/ExampleMod`, whose postfix fires
+(Unity 2020.3). See the self-test in `examples/ExampleMod`, whose postfix fires
 on a method it patches at load. The real game names are intact, so
 `AccessTools.Method(typeof(SomeType), "SomeMethod")` and `[HarmonyPatch(...)]`
 resolve directly against the decompiled source in `src/`.
@@ -193,6 +193,6 @@ A healthy load looks like:
   the Steam client is running can make Steamworks' `RestartAppIfNecessary` bounce
   the process (intro shows, closes, relaunches, Steam says "launching"), because
   the test copy shares appid `909320` with your installed game. This is a
-  *launch-environment* artifact, not a loader problem — the mod loads on every
+  *launch-environment* artifact, not a loader problem; the mod loads on every
   boot regardless. To avoid it, launch with the Steam client closed, or test the
   loader against a build deployed with `tools/deploy.sh` and read `mods.log`.

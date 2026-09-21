@@ -11,7 +11,7 @@ source "$(dirname "${BASH_SOURCE[0]}")/env.sh"
 target="${1:-Assembly-CSharp}"
 srcdir="$RUIN_SRC_DIR/$target"
 outdir="$RUIN_PROJECT_DIR/build"
-[ -d "$srcdir" ] || { echo "No src/$target — run tools/seed-src.sh" >&2; exit 1; }
+[ -d "$srcdir" ] || { echo "No src/$target, run tools/seed-src.sh" >&2; exit 1; }
 mkdir -p "$outdir"
 
 # Locate Roslyn csc from the installed SDK.

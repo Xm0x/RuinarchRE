@@ -18,8 +18,8 @@ Paths relative to `src/Assembly-CSharp/`.
 
 ```
 <WorldType>-<Day>_<Time>.zip        (manual)   |   <timestamp>.zip (autosave)
-├── mainSave.sav      FullSerializer binary of SaveDataCurrentProgress (~5–50 MB)
-├── gameDB.db         SQLite3 event-log database (~1–5 MB)
+├── mainSave.sav      FullSerializer binary of SaveDataCurrentProgress (~5-50 MB)
+├── gameDB.db         SQLite3 event-log database (~1-5 MB)
 ├── quickInfo.json    metadata (Newtonsoft.Json): saveVersion, scenarioName,
 │                     omnipotentMode, archetype, portalLevel, appliedMods
 └── screen.png        screenshot thumbnail
@@ -27,10 +27,10 @@ Paths relative to `src/Assembly-CSharp/`.
 
 Directories (`UtilityScripts/Utilities.cs`), all under
 `Application.persistentDataPath`:
-- `gameSavePath` = `…/Ruinarch Game Saves/` — manual saves.
-- `autosavePath` = `…/Ruinarch Game Saves/Autosaves/` — autosaves (**max 3**,
+- `gameSavePath` = `…/Ruinarch Game Saves/`: manual saves.
+- `autosavePath` = `…/Ruinarch Game Saves/Autosaves/`: autosaves (**max 3**,
   oldest rotated out).
-- `tempPath` / `tempZipPath` = `…/Temp/` — staging for save packaging / load
+- `tempPath` / `tempZipPath` = `…/Temp/`: staging for save packaging / load
   extraction.
 
 > Under Proton these live in the prefix at
@@ -40,15 +40,15 @@ Directories (`UtilityScripts/Utilities.cs`), all under
 
 ### `ISavable.cs`
 Every persistable runtime object implements it:
-- `persistentID` (string GUID via `Utilities.GetNewUniqueID()`) — the primary key
+- `persistentID` (string GUID via `Utilities.GetNewUniqueID()`): the primary key
   for all cross-references.
-- `objectType` (`OBJECT_TYPE`) — which hub it belongs to.
-- `serializedData` (`Type`) — reflection hint to its `SaveData<T>` subclass.
+- `objectType` (`OBJECT_TYPE`): which hub it belongs to.
+- `serializedData` (`Type`): reflection hint to its `SaveData<T>` subclass.
 
 Implementers: `Character`, `Faction`, `TileObject`, `Party`, `PartyQuest`,
 `ActualGoapNode`, …
 
-### `SaveData.cs` — `SaveData<T> : BaseSaveData`
+### `SaveData.cs`: `SaveData<T> : BaseSaveData`
 `[Serializable]` generic wrapper with virtual `Save(T data)`, `T Load()`,
 `CleanUp()`. Instances are created by reflection:
 ```csharp
@@ -59,13 +59,13 @@ Subclasses: `SaveDataCharacter`, `SaveDataFaction`, `SaveDataTileObject` (and
 weapon/armor/resource/structure variants), `SaveDataParty`,
 `SaveDataActualGoapNode`, …
 
-### `SaveDataCurrentProgress.cs` — the root
+### `SaveDataCurrentProgress.cs`: the root
 Holds all game state:
 - Scalars: `fileName`, `gameVersion` (`Application.version`), timestamp,
   language, game date (month/day/year/tick), `continuousDays`.
 - `worldMapSave`, `worldSettingsData`, `familyTreeDatabase`, `playerSave`
   (`SaveDataPlayerGame`), `victoryCondition`, portrait availability, plague state.
-- **`objectHub`** `Dictionary<OBJECT_TYPE, BaseSaveDataHub>` — the bulk store.
+- **`objectHub`** `Dictionary<OBJECT_TYPE, BaseSaveDataHub>`: the bulk store.
   Each hub is `Dictionary<persistentID, SaveData*>`. Keys include: `Character`,
   `Faction`, `Tile_Object`, `Action` (in-progress GOAP nodes), `Party`,
   `Party_Quest`, `Job`, `Crime`, `Interrupt`, `Trait`, `Gathering`,
@@ -77,7 +77,7 @@ gender, HP, position/rotation, …) plus nested component SaveData
 `Load()` builds the `Character` via `CharacterManager.CreateFromSave`;
 `LoadReferences()` resolves faction/job/structure/territory links.
 
-## Save pipeline — `SaveManager.cs`, `SaveCurrentProgressManager.cs`
+## Save pipeline: `SaveManager.cs`, `SaveCurrentProgressManager.cs`
 
 `SaveManager` (singleton) owns `SavePlayerManager` + `SaveCurrentProgressManager`
 and the directory setup. A save (`DoManualSave(fileName, callback, isAutosave)`)
@@ -89,32 +89,32 @@ runs a coroutine that fans serialization across threads:
 3. `SaveFactions` (from `FactionManager.allFactions`), `SaveCharacters`
    (`CharacterManager.CreateNewSaveDataCharacter`), `SaveJobs`, `SaveActions`,
    `SaveVictoryCondition`.
-4. `SaveTileObjectsMultithread` — TileObjects batched **200 per thread**;
+4. `SaveTileObjectsMultithread`: TileObjects batched **200 per thread**;
    `SaveDestroyedTileObjects` on its own thread.
 5. Each object goes through `AddToSaveHub<T>()`: reflect `SaveData<T>`,
    `Save(data)`, store in `objectHub[objectType]`.
 6. `RuinarchSQLDatabase.SaveInMemoryDatabaseToFile(gameDB.db)` backs up the log DB.
-7. `SaveGame.Save(mainSave.sav, root)` — BayatGames.SaveGameFree → FullSerializer
+7. `SaveGame.Save(mainSave.sav, root)`: BayatGames.SaveGameFree → FullSerializer
    binary.
 8. `ZipFile.CreateFromDirectory(tempZipPath, out)` packages the `.zip`; move to
    `gameSavePath` (manual) or `autosavePath` (autosave, rotate to 3).
 
-## Load pipeline — two phases
+## Load pipeline: two phases
 
 `LoadSaveDataCurrentProgress(...)` extracts the ZIP to `tempPath` and queues
 `ReadSaveDataFileInOtherThread()`.
 
-**Phase 0 — deserialize:** `SaveGame.Load<SaveDataCurrentProgress>(mainSave.sav)`
+**Phase 0, deserialize:** `SaveGame.Load<SaveDataCurrentProgress>(mainSave.sav)`
 → FullSerializer rebuilds the SaveData graph (`objectHub` populated). Log DB
 restored via `RuinarchSQLDatabase.LoadDatabaseFromFileToMemory(gameDB.db)`.
 
-**Phase 1 — instantiate (`Load`):** `SaveDataCurrentProgress` calls
+**Phase 1, instantiate (`Load`):** `SaveDataCurrentProgress` calls
 `LoadCharacters` / `LoadFactions` / `LoadTileObjects` / `LoadParties` /
 `LoadActions` / … Each `SaveData.Load()` builds a runtime object (e.g.
 `CharacterManager.CreateFromSave`). After this, objects exist but cross-refs are
 still **null** (only `persistentID` strings held).
 
-**Phase 2 — resolve (`LoadReferences`):** `LoadCharacterReferences` /
+**Phase 2, resolve (`LoadReferences`):** `LoadCharacterReferences` /
 `LoadFactionReferences` / … iterate instantiated objects and call
 `obj.LoadReferences(saveData)`, turning IDs into object refs, e.g.:
 ```csharp
@@ -124,10 +124,10 @@ Deferred waves: `LoadTraitsSecondWave` (instanced traits) and
 `LoadCharactersCurrentAction` (reattach the in-progress `ActualGoapNode`).
 
 This two-phase split is what lets the save format use flat `persistentID`
-strings with no foreign-key constraints — all graph edges are rebuilt after every
+strings with no foreign-key constraints. All graph edges are rebuilt after every
 node exists.
 
-## SQLite — logs only — `Databases/SQLDatabase/RuinarchSQLDatabase.cs`
+## SQLite, logs only: `Databases/SQLDatabase/RuinarchSQLDatabase.cs`
 
 `System.Data.SQLite`, an **in-memory** DB (`Data Source=:memory:;`). One `Logs`
 table (persistentID PK, dates, `logText`/`rawText`, category, key, actionID,
@@ -135,22 +135,22 @@ table (persistentID PK, dates, `logText`/`rawText`, category, key, actionID,
 `LOG_IDENTIFIER` via `ALTER TABLE`).
 - `InsertLog` / `InsertLogUsingMultiThread` (batched via `MultiThreadPool`) /
   `InsertLogAndDeleteOldest` (caps at `SettingsManager.logLimit`).
-- `PopulateLogsThatMatchCriteria` — filtered, paginated queries for the Logs UI.
+- `PopulateLogsThatMatchCriteria`: filtered, paginated queries for the Logs UI.
 - Persisted with `SQLiteConnection.BackupDatabase()` in both directions
   (memory ↔ `gameDB.db`).
 
 **Orthogonal to game state**: `gameDB.db` corruption loses logs only; game
 recovers from `mainSave.sav`. Save corruption loses the game; logs are
-unaffected. (Note: `DatabaseManager` boots pre-world — see
-`docs/systems/CORE_LOOP.md` §7 — so logging/localization are DB-backed before the
+unaffected. (Note: `DatabaseManager` boots pre-world, see
+`docs/systems/CORE_LOOP.md` §7, so logging/localization are DB-backed before the
 world exists.)
 
-## Player-level data — `SavePlayerManager.cs`
+## Player-level data: `SavePlayerManager.cs`
 `SaveDataPlayer` (settlement, unlocked skills, tutorials) is stored **separately**
 from the run: `gameSavePath + SAVED_PLAYER_DATA_2` via `SaveGame.Save/Load`. It is
 not inside the per-game `.zip`.
 
-## Versioning — `SaveUtilities.cs`, `SaveDataQuickInfo.cs`
+## Versioning: `SaveUtilities.cs`, `SaveDataQuickInfo.cs`
 - Version captured at save time in `SaveDataCurrentProgress.gameVersion`,
   `SaveDataQuickInfo.saveVersion`, and `SaveDataPlayer.gameVersion`
   (= `Application.version`).
@@ -159,7 +159,7 @@ not inside the per-game `.zip`.
 - `IsSaveFileValid(zip)` extracts `mainSave.sav`, reads `gameVersion` via
   Newtonsoft.Json, checks compatibility. `AreAppliedModsCompatible()` guards
   mod-mismatch corruption.
-- **No auto-migration** — incompatible versions are rejected at load, not
+- **No auto-migration**: incompatible versions are rejected at load, not
   converted.
 
 ## Formats at a glance
@@ -171,4 +171,4 @@ not inside the per-game `.zip`.
 
 > RE tip: because `mainSave.sav` is FullSerializer's JSON-compatible format, a
 > save can be inspected by decoding it with the same `FullSerializer.dll` shipped
-> in `Managed/` — a natural next tool for save-editing/analysis.
+> in `Managed/`, a natural next tool for save-editing/analysis.

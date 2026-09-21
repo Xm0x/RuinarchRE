@@ -8,7 +8,6 @@ export RUIN_DATA_DIR="$RUIN_GAME_DIR/Ruinarch_Data"
 export RUIN_MANAGED_DIR="$RUIN_DATA_DIR/Managed"
 
 # --- Toolchain ---
-export GHIDRA_DIR="/home/user/Desktop/Apps/ghidra_12.1.3_PUBLIC"
 export PATH="$PATH:$HOME/.dotnet/tools"   # ilspycmd
 
 # --- Project layout ---

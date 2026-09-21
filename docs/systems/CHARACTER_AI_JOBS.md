@@ -19,7 +19,7 @@ tick → BehaviourComponent.RunBehaviour()          (priority loop)
 Interrupts can preempt at any point; Traits gate eligibility throughout.
 ```
 
-## 1. Behaviour selection — `BehaviourComponent.cs` + `CharacterBehaviour.cs`
+## 1. Behaviour selection: `BehaviourComponent.cs` + `CharacterBehaviour.cs`
 
 `BehaviourComponent` (1700+ lines) holds `currentBehaviourComponents`
 (`List<CharacterBehaviour>`) sorted by `priority` (descending).
@@ -36,7 +36,7 @@ Interrupts can preempt at any point; Traits gate eligibility throughout.
 `CharacterBehaviour` (abstract base): each subclass is one behaviour
 (`ArsonistBehaviour`, `AttackVillageBehaviour`, `PatrolBehaviour`, …).
 - `abstract bool TryDoBehaviour(Character, ref string log, out JobQueueItem producedJob)`
-  — returns true iff it acted.
+  Returns true iff it acted.
 - `priority` (sort key), `attributes` (`BEHAVIOUR_COMPONENT_ATTRIBUTE[]`:
   `ONCE_PER_DAY`, `DO_NOT_SKIP_PROCESSING`, `STOPS_BEHAVIOUR_LOOP`).
 - Hooks: `OnAddBehaviourToCharacter` / `OnRemoveBehaviourFromCharacter`.
@@ -44,9 +44,9 @@ Interrupts can preempt at any point; Traits gate eligibility throughout.
 Behaviour objects also stash per-character AI state: `attackVillageTarget`,
 `arsonVillageTarget`, `nest`, combat-mode snapshots, cooldowns.
 
-## 2. Jobs — `JobQueueItem.cs`, `GoapPlanJob.cs`, `JobQueue.cs`, `JobManager.cs`
+## 2. Jobs: `JobQueueItem.cs`, `GoapPlanJob.cs`, `JobQueue.cs`, `JobManager.cs`
 
-**`JobQueueItem`** (abstract, ~615 lines) — the job contract:
+**`JobQueueItem`** (abstract, ~615 lines): the job contract:
 - `persistentID`, `jobType` (`JOB_TYPE`), `originalOwner` (`IJobOwner`),
   `assignedCharacter`, `priority` (via virtual `GetPriority`),
   `blacklistedCharacters`.
@@ -56,7 +56,7 @@ Behaviour objects also stash per-character AI state: `attackVillageTarget`,
   `PushedBack(jobThatPushed)` (cancels after ~3 push-backs).
 - Broadcasts `JOB_ADDED_TO_QUEUE` / `JOB_REMOVED_FROM_QUEUE` on the Messenger bus.
 
-**`GoapPlanJob : JobQueueItem`** — the common GOAP-backed job:
+**`GoapPlanJob : JobQueueItem`**: the common GOAP-backed job:
 - `goal` (`GoapEffect`), `targetInteractionType` (`INTERACTION_TYPE`),
   `assignedPlan` (`GoapPlan`), `targetPOI` (`IPointOfInterest`).
 - `ProcessJob()`: if `assignedPlan == null`, call
@@ -64,14 +64,14 @@ Behaviour objects also stash per-character AI state: `attackVillageTarget`,
 - `otherData` `Dictionary<INTERACTION_TYPE, OtherData[]>`, `priorityLocations`
   (settlement/structure/area hints for the planner).
 
-**`JobQueue`** — per-character priority queue:
+**`JobQueue`**: per-character priority queue:
 - `jobsInQueue` (main, priority-sorted) + `pendingTopPriorityJobs` (awaiting a
   GOAP plan).
 - `AddJobInQueue` → state checks + `CanJobBeAddedToQueue` →
   `InsertJobToMainJobQueue` (priority insert).
 - `ProcessFirstJobInQueue()` runs `jobs[0].ProcessJob()` when it's top priority.
 
-**`JobManager`** (singleton) — eligibility registries:
+**`JobManager`** (singleton): eligibility registries:
 - `CanTakeJobChecker` dict (40+: `CanTakeBury`, `CanTakeRemoveStatus`, …).
 - `JobApplicabilityChecker` dict (30+: `IsDestroyApplicable`,
   `IsBurySettlementApplicable`, …).
@@ -80,12 +80,12 @@ Behaviour objects also stash per-character AI state: `attackVillageTarget`,
 - Broadcast `CHECK_JOB_APPLICABILITY` re-validates queued jobs against world
   state (target still exists/reachable) and culls the invalid.
 
-## 3. GOAP core — `Goap/`
+## 3. GOAP core: `Goap/`
 
 Goal-Oriented Action Planning: given a goal (an effect to achieve), search a
 chain of actions whose preconditions/effects bridge current → goal state.
 
-- **`GoapPlanner.cs`** — orchestrator:
+- **`GoapPlanner.cs`**: orchestrator:
   - `StartGOAP(goal|INTERACTION_TYPE, target, job, isPersonalPlan)` spawns a
     `GoapThread` on `MultiThreadPool` (planning is **off the main thread**);
     sets `job.SetIsInMultithread(true)`.
@@ -95,28 +95,28 @@ chain of actions whose preconditions/effects bridge current → goal state.
     - plan null → fallback logic (add `Abstain Fullness/Tiredness/Happiness`
       traits; force `PRODUCE_FOOD` to avoid starvation), log
       unable-to-do (or report-crime for cultists), `job.CancelJob()`.
-- **`GoapPlan.cs`** — the chain: `allNodes` (`List<JobNode>`), `currentNode`
-  pointer, `target`. `SetActionNodes(...)` (1–5 overloads) builds it;
+- **`GoapPlan.cs`**: the chain: `allNodes` (`List<JobNode>`), `currentNode`
+  pointer, `target`. `SetActionNodes(...)` (1-5 overloads) builds it;
   `SetNextNode()` advances; `isEnd`, `isBeingRecalculated`, `doNotRecalculate`.
-- **`GoapAction.cs`** — abstract action def: `goapType` (`INTERACTION_TYPE`),
+- **`GoapAction.cs`**: abstract action def: `goapType` (`INTERACTION_TYPE`),
   `basePrecondition` (`Precondition`), `baseExpectedEffects` (`List<GoapEffect>`),
   `states` (`Dictionary<string, GoapActionState>`). `CreateStates()` binds
   Pre/PerTick/After handlers via reflection; `DetermineActionDuration`,
   `IsInvalid` hooks.
-- **`ActualGoapNode.cs`** — a concrete action instance being executed:
+- **`ActualGoapNode.cs`**: a concrete action instance being executed:
   `actor`, `poiTarget`, `action`, `actionStatus` (`PERFORMING`/`SUCCESS`/`FAIL`),
   `cost`, `currentStateName`, `ticksPerformingCurrentState`,
   `expectedActionStateDuration`, `uniqueActionData` (`OtherData[]`). Also carries
-  `crimeType`, `rumor`, `assumption`, `awareCharacters` — the hooks into the
+  `crimeType`, `rumor`, `assumption`, `awareCharacters`, the hooks into the
   social/crime systems. Implements `ISavable`.
-- **`Precondition.cs`** — `goapEffect` + `Func<Character, IPointOfInterest,
+- **`Precondition.cs`**: `goapEffect` + `Func<Character, IPointOfInterest,
   OtherData[], JOB_TYPE, bool>`; `CanSatisfyCondition` gates plan viability.
-- **`GoapEffect.cs`** — a goal/effect spec: `conditionType`
+- **`GoapEffect.cs`**: a goal/effect spec: `conditionType`
   (`GOAP_EFFECT_CONDITION`: `ADD_TRAIT`, `REMOVE_TRAIT`, `HEAL_CHARACTER`,
   `INCREASE_STAT`, …), `conditionKey` (trait/stat name), `isKeyANumber`,
   `target` (`GOAP_EFFECT_TARGET`: SELF/TARGET/NEARBY). `IsSameGoal` compares
   type+key.
-- **`Goap/Unique_Action_Data/`** (15 files) — `OtherData` subclasses
+- **`Goap/Unique_Action_Data/`** (15 files): `OtherData` subclasses
   (`CraftEquipmentUAD`, `FeedUAD`, `HealSelfUAD`, `CureCharacterUAD`, …) carrying
   action-specific parameters; each has a SaveData twin.
 
@@ -128,7 +128,7 @@ chain of actions whose preconditions/effects bridge current → goal state.
 `SetState(next, node)` transitions. When `currentNode == null` the plan ends
 (`isEnd = true`) and the job's completion handler fires.
 
-## 5. Interrupts — `InterruptComponent.cs` + `Interrupts/Interrupt.cs`
+## 5. Interrupts: `InterruptComponent.cs` + `Interrupts/Interrupt.cs`
 
 Short, event-driven reactions that can preempt the plan:
 - `InterruptComponent.TriggerInterrupt(INTERRUPT type, IPointOfInterest target)`
@@ -143,7 +143,7 @@ Short, event-driven reactions that can preempt the plan:
 - `Interrupt` (abstract) mirrors the `GoapAction` reaction pattern with
   `ReactionToActor` / `ReactionToTarget` for social/crime consequences.
 
-## 6. Traits — `Traits/Trait.cs` + `TraitContainer.cs`
+## 6. Traits: `Traits/Trait.cs` + `TraitContainer.cs`
 
 Traits are the pervasive modifier layer (150+ subclasses: `Paralyzed`,
 `Quarantined`, `Pyrophobic`, `Kleptomaniac`, `Abstain Fullness`, …):
@@ -165,15 +165,15 @@ character / target by `persistentID` and reattaches ongoing actions
 
 ## Content enums (the game's vocabulary)
 
-- `JOB_TYPE` — **229 values** (recovery: `ENERGY_RECOVERY_URGENT`,
+- `JOB_TYPE`: **229 values** (recovery: `ENERGY_RECOVERY_URGENT`,
   `FULLNESS_RECOVERY_NORMAL`; work: `PRODUCE_WOOD/FOOD/STONE/METAL`,
   `CRAFT_OBJECT`, `REPAIR`; social: `VISIT_FRIEND`, `PREACH`; combat: `COMBAT`,
   `BERSERK_ATTACK`; special: `TRIGGER_FLAW`, `CULTIST_TRANSFORM`, `PLAGUE_CARE`).
   Helpers: `IsFullnessRecoveryTypeJob()`, `IsCultistJob()`, …
-- `INTERACTION_TYPE` — **~250 values** (`EAT`, `SLEEP`, `STEAL`, `ASSAULT`,
+- `INTERACTION_TYPE`: **~250 values** (`EAT`, `SLEEP`, `STEAL`, `ASSAULT`,
   `SLAY_CHARACTER`, `MAKE_LOVE`, `CHOP_WOOD`, `BUILD_BLUEPRINT`,
   `RITUAL_KILLING`, …). This is `GoapAction.goapType`, indexed in
   `InteractionManager.goapActionData`.
-- `GOAP_EFFECT_CONDITION`, `GOAP_EFFECT_TARGET` — goal/effect matching.
-- `INTERRUPT` — 100+ interrupt types (`InteractionManager.interruptData`).
-- `BEHAVIOUR_COMPONENT_ATTRIBUTE`, `CHARACTER_STATE` — loop/state control.
+- `GOAP_EFFECT_CONDITION`, `GOAP_EFFECT_TARGET`: goal/effect matching.
+- `INTERRUPT`: 100+ interrupt types (`InteractionManager.interruptData`).
+- `BEHAVIOUR_COMPONENT_ATTRIBUTE`, `CHARACTER_STATE`: loop/state control.

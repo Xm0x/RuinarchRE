@@ -21,7 +21,7 @@ Fixed integer time, not wall-clock:
 ordered by `GameDateComparer`. `GameManager.Today()` mints a fresh `GameDate`
 each call.
 
-## 2. Frame → tick driver — `GameManager.cs`
+## 2. Frame → tick driver: `GameManager.cs`
 
 `GameManager` is the singleton at the center. Its Unity **`Update()`** runs a
 real-time timer whose interval is the *progression speed*:
@@ -42,15 +42,15 @@ GameManager.Update()  ── timer elapsed ──►  TickStarted()
                                               └─ Messenger.Broadcast(Signals.TICK_ENDED)
 ```
 
-So a "tick" is not one frame — it's a logical step whose per-entity work is
+So a "tick" is not one frame, it's a logical step whose per-entity work is
 **amortized across several render frames** (see §4) to avoid stutter.
 
-## 3. Event bus — `Messenger.cs` + `Signals.cs`
+## 3. Event bus: `Messenger.cs` + `Signals.cs`
 
 Everything decouples through a **static** typed event bus:
 
 - `Messenger.AddListener<T…>(string key, callback)` / `Broadcast<T…>(key, args)`.
-- Backing store: `eventTable` `Dictionary<string, Delegate>`. Supports 0–7
+- Backing store: `eventTable` `Dictionary<string, Delegate>`. Supports 0-7
   typed args (generic overloads).
 - `MarkAsPermanent(key)` protects a listener from `Cleanup()` (used for
   cross-scene/global listeners so a scene teardown doesn't drop them).
@@ -66,9 +66,9 @@ CHECK_SCHEDULES
 ```
 
 `SchedulingManager.cs` listens for `CHECK_SCHEDULES` and fires any actions queued
-for the current `GameDate` — this is how timed jobs/events land on the right tick.
+for the current `GameDate`. This is how timed jobs/events land on the right tick.
 
-## 4. Per-entity fan-out — `CharacterTickManager.cs`
+## 4. Per-entity fan-out: `CharacterTickManager.cs`
 
 The tick doesn't call every character inline. `CharacterTickManager` **spreads
 character updates across frames** with a per-frame budget:
@@ -80,7 +80,7 @@ character updates across frames** with a per-frame budget:
 
 This is the key perf trick: hundreds of agents, but only a slice tick per frame.
 
-## 5. Per-character logic — `Character.cs`
+## 5. Per-character logic: `Character.cs`
 
 Each character owns a component bag (needs, behaviour, mood, interrupt, state,
 combat, job) plus a `GoapPlanner` and `JobQueue`.
@@ -98,12 +98,12 @@ else
     continue current GOAP action / job
 ```
 
-(Method ranges in the decompile: `Character.cs` ~3927–3984 and ~4119–4180.)
+(Method ranges in the decompile: `Character.cs` ~3927-3984 and ~4119-4180.)
 
-## 6. Behaviour → goal → plan — `BehaviourComponent.cs` + `Goap/`
+## 6. Behaviour → goal → plan: `BehaviourComponent.cs` + `Goap/`
 
 - `BehaviourComponent.RunBehaviour()` walks `currentBehaviourComponents`
-  (`CharacterBehaviour` subclasses — e.g. `ArsonistBehaviour`,
+  (`CharacterBehaviour` subclasses, e.g. `ArsonistBehaviour`,
   `AttackVillageBehaviour`, `PatrolBehaviour`) by `priority` and runs the
   winner, which produces a goal / job.
 - `Goap/` implements Goal-Oriented Action Planning:
@@ -124,18 +124,18 @@ tick → RunBehaviour() → CharacterBehaviour (priority) → goal
 
 Scene start is orchestrated so singletons come up in dependency order:
 
-- `StartupManager.cs` — scene bootstrap entry. Calls
+- `StartupManager.cs`: scene bootstrap entry. Calls
   `Initializer.InitializeDataBeforeWorldCreation{MainThread,OtherThread}`, then
   `mapGenerator.InitializeWorld()` **or** `LoadGame()`, then broadcasts
   `GAME_LOADED` / progression-loaded signals.
-- `Initializer.cs` — the actual manager boot sequence:
+- `Initializer.cs`: the actual manager boot sequence:
   - **Pre-world (main thread):** LocalizationManager, GameManager,
     DatabaseManager, CharacterManager, TraitManager, PlayerManager,
     InnerMapManager, UIManager, WorldEventManager.
   - **Background thread:** RaceManager, LandmarkManager, CrimeManager,
     JobManager, CombatManager.
   - **Post-world:** LightingManager, QuestManager, AudioManager.
-- `LevelLoaderManager.cs` — async scene loads (main menu ↔ game) with progress.
+- `LevelLoaderManager.cs`: async scene loads (main menu ↔ game) with progress.
 
 ## 8. Notable
 
@@ -145,7 +145,7 @@ Scene start is orchestrated so singletons come up in dependency order:
 - **Save hooks**: `StartupManager` branches to `LoadGame()`; `GAME_LOADED` /
   `PROGRESSION_LOADED` are the signals other systems key off to restore state.
   Save format itself is documented separately (`docs/systems/SAVE_FORMAT.md`).
-- **DatabaseManager** boots early (pre-world) — the SQLite layer
+- **DatabaseManager** boots early (pre-world). The SQLite layer
   (`System.Data.SQLite`) is available before the world exists, consistent with
   logs/localization being DB-backed.
 
