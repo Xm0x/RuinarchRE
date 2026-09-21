@@ -7,6 +7,9 @@
 *.resource
 *.resS
 reference/           # raw ilspycmd baseline (regenerate via tools/decompile.sh)
+build/               # compiled DLLs (tools/build.sh output)
+testgame/            # hardlinked game copy for drop-in verify
+testprefix/          # Proton prefix for drop-in verify
 
 # --- Build artifacts ---
 bin/
