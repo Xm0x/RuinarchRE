@@ -27,7 +27,7 @@ Edit `tools/env.sh` if your Ruinarch install path differs.
 - [x] M2 — drop-in DLLs boot the game *(verified: our build runs to main menu)*
 - [x] M3 — behavior-verified across a full scenario *(playtested on our build, no issues)*
 - [x] M4 — all major systems documented ([docs/systems/](docs/systems/): core loop, AI/jobs, world, saves)
-- [ ] M5 — human-quality clean source
+- [x] M5 — structured control flow (no goto artifacts) + edit→build→run dev loop ([docs/MODDING.md](docs/MODDING.md))
 
 | Path | What |
 |---|---|
