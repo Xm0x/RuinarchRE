@@ -23,13 +23,11 @@ Edit `tools/env.sh` if your Ruinarch install path differs.
 ## Status
 
 - [x] M0 — reproducible raw baseline export
-- [ ] M1 — `src/` compiles to DLLs, 0 errors
+- [x] M1 — `src/` compiles to DLLs, 0 errors *(build via `tools/build.sh`)*
 - [ ] M2 — drop-in DLLs boot the game
 - [ ] M3 — behavior-verified across a full scenario
 - [ ] M4 — all major systems documented
 - [ ] M5 — human-quality clean source
-
-## Layout
 
 | Path | What |
 |---|---|
