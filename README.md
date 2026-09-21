@@ -1,5 +1,7 @@
 # RuinarchRE
 
+DISCLAIMER: For %100 honesty, help of AI was used in this project.
+
 A 100% reverse-engineering / source-restoration project for **Ruinarch**
 (Maya Games), a Unity **Mono** title. Because the game ships .NET CIL with full
 metadata intact, the goal is a clean, organized, documented, **recompilable**
