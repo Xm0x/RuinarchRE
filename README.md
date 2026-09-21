@@ -2,9 +2,16 @@
 
 DISCLAIMER: For %100 honesty, help of AI was used in this project.
 
-A 100% reverse-engineering and source-restoration project for **Ruinarch**. The
-goal is a clean, organized, documented, **recompilable** C# source tree that
-rebuilds the game and drops back in.
+A reverse-engineering / source-restoration project for **Ruinarch**: all 4980
+code types decompiled into a clean, organized, documented, **recompilable** C#
+tree that rebuilds the game and boots it (drop-in verified, playtested).
+
+This is 100% of the game's *code*, in the sense defined in
+[`docs/ARCHITECTURE.md`](docs/ARCHITECTURE.md): buildable, behavior-verified
+source plus system docs. It is not asset extraction (art, audio, and data live
+in the `.assets` files), and local variable names inside methods are still
+decompiler-generated. The recovered names are types, methods, fields, and
+namespaces.
 
 > **Legal:** this repo ships no game binaries. It contains only reverse-
 > engineering scripts, our own reconstructed and annotated source, and docs.
