@@ -52,26 +52,28 @@ public class CraftEquipment : GoapAction
 			{
 			case RESOURCE.WOOD:
 				precondition = new Precondition(InteractionManager.Instance.GetGoapEffectData(GOAP_EFFECT_CONDITION.TAKE_POI, "Wood Pile", p_isKeyANumber: false, GOAP_EFFECT_TARGET.ACTOR), HasWood);
-				goto IL_01d9;
-			case RESOURCE.STONE:
-				precondition = new Precondition(InteractionManager.Instance.GetGoapEffectData(GOAP_EFFECT_CONDITION.TAKE_POI, "Stone Pile", p_isKeyANumber: false, GOAP_EFFECT_TARGET.ACTOR), HasStone);
-				goto IL_01d9;
-			case RESOURCE.METAL:
-				precondition = new Precondition(InteractionManager.Instance.GetGoapEffectData(GOAP_EFFECT_CONDITION.TAKE_POI, "Metal Pile", p_isKeyANumber: false, GOAP_EFFECT_TARGET.ACTOR), HasMetal);
-				goto IL_01d9;
-			case RESOURCE.CLOTH:
-				precondition = new Precondition(InteractionManager.Instance.GetGoapEffectData(GOAP_EFFECT_CONDITION.TAKE_POI, "Cloth Pile", p_isKeyANumber: false, GOAP_EFFECT_TARGET.ACTOR), HasCloth);
-				goto IL_01d9;
-			case RESOURCE.LEATHER:
-				precondition = new Precondition(InteractionManager.Instance.GetGoapEffectData(GOAP_EFFECT_CONDITION.TAKE_POI, "Leather Pile", p_isKeyANumber: false, GOAP_EFFECT_TARGET.ACTOR), HasLeather);
-				goto IL_01d9;
-			default:
-				throw new ArgumentOutOfRangeException();
-			case RESOURCE.NONE:
-				break;
-				IL_01d9:
 				isOverridden = true;
 				return precondition;
+			case RESOURCE.STONE:
+				precondition = new Precondition(InteractionManager.Instance.GetGoapEffectData(GOAP_EFFECT_CONDITION.TAKE_POI, "Stone Pile", p_isKeyANumber: false, GOAP_EFFECT_TARGET.ACTOR), HasStone);
+				isOverridden = true;
+				return precondition;
+			case RESOURCE.METAL:
+				precondition = new Precondition(InteractionManager.Instance.GetGoapEffectData(GOAP_EFFECT_CONDITION.TAKE_POI, "Metal Pile", p_isKeyANumber: false, GOAP_EFFECT_TARGET.ACTOR), HasMetal);
+				isOverridden = true;
+				return precondition;
+			case RESOURCE.CLOTH:
+				precondition = new Precondition(InteractionManager.Instance.GetGoapEffectData(GOAP_EFFECT_CONDITION.TAKE_POI, "Cloth Pile", p_isKeyANumber: false, GOAP_EFFECT_TARGET.ACTOR), HasCloth);
+				isOverridden = true;
+				return precondition;
+			case RESOURCE.LEATHER:
+				precondition = new Precondition(InteractionManager.Instance.GetGoapEffectData(GOAP_EFFECT_CONDITION.TAKE_POI, "Leather Pile", p_isKeyANumber: false, GOAP_EFFECT_TARGET.ACTOR), HasLeather);
+				isOverridden = true;
+				return precondition;
+			case RESOURCE.NONE:
+				break;
+			default:
+				throw new ArgumentOutOfRangeException();
 			}
 		}
 		return base.GetPrecondition(actor, target, otherData, jobType, out isOverridden);

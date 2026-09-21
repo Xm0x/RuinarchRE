@@ -267,22 +267,16 @@ public class uMyGUI_TreeBrowser : MonoBehaviour
 				}
 				int num2;
 				GameObject gameObject;
-				if (p_rootNodes[i].Children != null)
+				if (p_rootNodes[i].Children != null && p_rootNodes[i].Children.Length != 0)
 				{
-					num2 = ((p_rootNodes[i].Children.Length != 0) ? 1 : 0);
-					if (num2 != 0)
-					{
-						gameObject = UnityEngine.Object.Instantiate(m_innerNodePrefab);
-						goto IL_00a4;
-					}
+					num2 = 1;
+					gameObject = UnityEngine.Object.Instantiate(m_innerNodePrefab);
 				}
 				else
 				{
 					num2 = 0;
+					gameObject = UnityEngine.Object.Instantiate(m_leafNodePrefab);
 				}
-				gameObject = UnityEngine.Object.Instantiate(m_leafNodePrefab);
-				goto IL_00a4;
-				IL_00a4:
 				RectTransform component = gameObject.GetComponent<RectTransform>();
 				if (m_forcedEntryHeight != 0f)
 				{

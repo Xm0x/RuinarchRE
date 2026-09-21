@@ -827,22 +827,12 @@ public class ActualGoapNode : IRumorable, ICrimeable, IReactable, ISavable, IObj
 		}
 		if (job is GoapPlanJob { assignedPlan: not null } goapPlanJob && goapPlanJob.assignedPlan.HasNodeWithAction(INTERACTION_TYPE.BUTCHER))
 		{
-			GoapAction goapAction = action;
-			if (goapAction == null || goapAction.goapType != INTERACTION_TYPE.BUTCHER)
-			{
-				GoapAction goapAction2 = action;
-				if (goapAction2 == null || goapAction2.goapType != INTERACTION_TYPE.ASSAULT)
-				{
-					goto IL_00ae;
-				}
-			}
-			if (poiTarget is Character character && character.race.IsSapient())
+			bool flag = action != null && (action.goapType == INTERACTION_TYPE.BUTCHER || action.goapType == INTERACTION_TYPE.ASSAULT);
+			if (flag && poiTarget is Character character && character.race.IsSapient())
 			{
 				return true;
 			}
 		}
-		goto IL_00ae;
-		IL_00ae:
 		GoapAction goapAction3 = action;
 		if (goapAction3 != null && goapAction3.goapType == INTERACTION_TYPE.BUTCHER && poiTarget is Character character2 && character2.race.IsSapient())
 		{

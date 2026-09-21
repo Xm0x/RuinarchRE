@@ -536,73 +536,70 @@ public class Player : ILeader, ISavable, IObjectManipulator
 		if (p_intel.actor == character)
 		{
 			text3 = LocalizationManager.Instance.GetLocalizedValue("UIStrings_Table", "Known_Action");
-			goto IL_0319;
 		}
-		if (p_intel is ActionIntel actionIntel)
+		else
 		{
-			ActualGoapNode node = actionIntel.node;
-			if ((object)node != null && node.action.goapType == INTERACTION_TYPE.MAKE_LOVE)
+			if (p_intel is ActionIntel actionIntel)
 			{
-				Obsessed traitOrStatus = character.traitContainer.GetTraitOrStatus<Obsessed>("Obsessed");
-				if (traitOrStatus != null)
+				ActualGoapNode node = actionIntel.node;
+				if ((object)node != null && node.action.goapType == INTERACTION_TYPE.MAKE_LOVE)
 				{
-					if (traitOrStatus.targetCharacter == actionIntel.node.actor)
+					Obsessed traitOrStatus = character.traitContainer.GetTraitOrStatus<Obsessed>("Obsessed");
+					if (traitOrStatus != null)
 					{
-						text3 = FormulateMakeLoveObsessedText(character, traitOrStatus.targetCharacter, actionIntel.node.target as Character);
-					}
-					else if (traitOrStatus.targetCharacter == actionIntel.node.target)
-					{
-						text3 = FormulateMakeLoveObsessedText(character, traitOrStatus.targetCharacter, actionIntel.node.actor);
-					}
-				}
-				goto IL_022a;
-			}
-		}
-		if (p_intel is InterruptIntel interruptIntel)
-		{
-			InterruptHolder interruptHolder = interruptIntel.interruptHolder;
-			if (interruptHolder != null && interruptHolder.interrupt.type == INTERRUPT.Flirt)
-			{
-				Obsessed traitOrStatus2 = character.traitContainer.GetTraitOrStatus<Obsessed>("Obsessed");
-				if (traitOrStatus2 != null)
-				{
-					if (traitOrStatus2.targetCharacter == interruptIntel.interruptHolder.actor)
-					{
-						text3 = FormulateFlirtObsessedText(character, traitOrStatus2.targetCharacter, interruptIntel.interruptHolder.target as Character);
-					}
-					else if (traitOrStatus2.targetCharacter == interruptIntel.interruptHolder.target)
-					{
-						text3 = FormulateFlirtObsessedText(character, traitOrStatus2.targetCharacter, interruptIntel.interruptHolder.actor);
+						if (traitOrStatus.targetCharacter == actionIntel.node.actor)
+						{
+							text3 = FormulateMakeLoveObsessedText(character, traitOrStatus.targetCharacter, actionIntel.node.target as Character);
+						}
+						else if (traitOrStatus.targetCharacter == actionIntel.node.target)
+						{
+							text3 = FormulateMakeLoveObsessedText(character, traitOrStatus.targetCharacter, actionIntel.node.actor);
+						}
 					}
 				}
 			}
-		}
-		goto IL_022a;
-		IL_022a:
-		if (string.IsNullOrEmpty(text3))
-		{
-			if (text2.HasEmotion())
+			if (p_intel is InterruptIntel interruptIntel)
 			{
-				text3 = Utilities.FormulateTextFromEmotions(text2, p_intel.actor, p_intel.target, character);
-			}
-			else
-			{
-				Dictionary<string, string> dictionary = MaccimaDictionaryPool<string, string>.Claim();
-				dictionary.Add("criminalName", p_intel.actor.name);
-				CRIME_SEVERITY crimeSeverity = CrimeManager.Instance.GetCrimeSeverity(character, p_intel.actor, p_intel.target, p_intel.reactable.crimeType);
-				CrimeSeverity crimeSeverity2 = CrimeManager.Instance.GetCrimeSeverity(crimeSeverity);
-				if (crimeSeverity2 != null)
+				InterruptHolder interruptHolder = interruptIntel.interruptHolder;
+				if (interruptHolder != null && interruptHolder.interrupt.type == INTERRUPT.Flirt)
 				{
-					dictionary.Add("crimeType", crimeSeverity2.localizedName);
+					Obsessed traitOrStatus2 = character.traitContainer.GetTraitOrStatus<Obsessed>("Obsessed");
+					if (traitOrStatus2 != null)
+					{
+						if (traitOrStatus2.targetCharacter == interruptIntel.interruptHolder.actor)
+						{
+							text3 = FormulateFlirtObsessedText(character, traitOrStatus2.targetCharacter, interruptIntel.interruptHolder.target as Character);
+						}
+						else if (traitOrStatus2.targetCharacter == interruptIntel.interruptHolder.target)
+						{
+							text3 = FormulateFlirtObsessedText(character, traitOrStatus2.targetCharacter, interruptIntel.interruptHolder.actor);
+						}
+					}
 				}
-				dictionary.Add("criminalObjectivePronoun", Utilities.GetPronounString(p_intel.actor.gender, PRONOUN_TYPE.OBJECTIVE, isUppercaseFirstLetter: false));
-				dictionary.Add("criminalSubjectivePronoun", Utilities.GetPronounString(p_intel.actor.gender, PRONOUN_TYPE.SUBJECTIVE, isUppercaseFirstLetter: false));
-				text3 = LocalizationManager.Instance.GetLocalizedValue("ShareIntel_Table", text2, dictionary);
-				MaccimaDictionaryPool<string, string>.Release(dictionary);
+			}
+			if (string.IsNullOrEmpty(text3))
+			{
+				if (text2.HasEmotion())
+				{
+					text3 = Utilities.FormulateTextFromEmotions(text2, p_intel.actor, p_intel.target, character);
+				}
+				else
+				{
+					Dictionary<string, string> dictionary = MaccimaDictionaryPool<string, string>.Claim();
+					dictionary.Add("criminalName", p_intel.actor.name);
+					CRIME_SEVERITY crimeSeverity = CrimeManager.Instance.GetCrimeSeverity(character, p_intel.actor, p_intel.target, p_intel.reactable.crimeType);
+					CrimeSeverity crimeSeverity2 = CrimeManager.Instance.GetCrimeSeverity(crimeSeverity);
+					if (crimeSeverity2 != null)
+					{
+						dictionary.Add("crimeType", crimeSeverity2.localizedName);
+					}
+					dictionary.Add("criminalObjectivePronoun", Utilities.GetPronounString(p_intel.actor.gender, PRONOUN_TYPE.OBJECTIVE, isUppercaseFirstLetter: false));
+					dictionary.Add("criminalSubjectivePronoun", Utilities.GetPronounString(p_intel.actor.gender, PRONOUN_TYPE.SUBJECTIVE, isUppercaseFirstLetter: false));
+					text3 = LocalizationManager.Instance.GetLocalizedValue("ShareIntel_Table", text2, dictionary);
+					MaccimaDictionaryPool<string, string>.Release(dictionary);
+				}
 			}
 		}
-		goto IL_0319;
-		IL_0319:
 		ConversationData conversationData3 = ObjectPoolManager.Instance.CreateNewConversationData(text3, character, DialogItem.Position.Left);
 		list.Add(conversationData);
 		list.Add(conversationData2);

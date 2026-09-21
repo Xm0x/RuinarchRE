@@ -16,6 +16,12 @@ export RUIN_PROJECT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)"
 export RUIN_SRC_DIR="$RUIN_PROJECT_DIR/src"
 export RUIN_REF_DIR="$RUIN_PROJECT_DIR/reference"
 
+# --- Dev drop-in target (safe copy; never the real install by default) ---
+export RUIN_TESTGAME_DIR="$RUIN_PROJECT_DIR/testgame"
+export RUIN_PROTON_DIR="$RUIN_GAME_DIR/../Proton 10.0"
+export RUIN_STEAM_DIR="$HOME/.local/share/Steam"
+export RUIN_APPID="909320"
+
 # The two assemblies that contain all game logic.
 export RUIN_GAME_ASSEMBLIES=(
   "Assembly-CSharp.dll"

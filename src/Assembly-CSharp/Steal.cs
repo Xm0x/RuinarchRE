@@ -64,34 +64,21 @@ public class Steal : GoapAction
 			if (tileObject?.characterOwner != null)
 			{
 				string opinionLabel = actor.relationshipContainer.GetOpinionLabel(tileObject.characterOwner);
-				if (actor.moodComponent.moodState != MOOD_STATE.Normal)
+				if (actor.moodComponent.moodState == MOOD_STATE.Normal || opinionLabel == "Acquaintance" || opinionLabel == "Friend" || opinionLabel == "Close Friend")
 				{
-					switch (opinionLabel)
-					{
-					case "Acquaintance":
-					case "Friend":
-					case "Close Friend":
-						break;
-					default:
-						goto IL_00db;
-					}
+					num += 2000;
 				}
-				num += 2000;
+				else if (actor.moodComponent.moodState == MOOD_STATE.Bad)
+				{
+					num += Utilities.Rng.Next(500, 601);
+				}
+				else if (actor.moodComponent.moodState == MOOD_STATE.Critical)
+				{
+					num += Utilities.Rng.Next(120, 201);
+				}
 			}
 		}
-		goto IL_0124;
-		IL_0124:
 		return num;
-		IL_00db:
-		if (actor.moodComponent.moodState == MOOD_STATE.Bad)
-		{
-			num += Utilities.Rng.Next(500, 601);
-		}
-		else if (actor.moodComponent.moodState == MOOD_STATE.Critical)
-		{
-			num += Utilities.Rng.Next(120, 201);
-		}
-		goto IL_0124;
 	}
 
 	public override IPointOfInterest GetTargetToGoTo(ActualGoapNode goapNode)

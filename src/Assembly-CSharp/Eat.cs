@@ -128,7 +128,7 @@ public class Eat : GoapAction
 					{
 						num += Utilities.Rng.Next(800, 851);
 					}
-					goto IL_0c12;
+					return num;
 				}
 			}
 			BaseSettlement settlement3;
@@ -230,8 +230,6 @@ public class Eat : GoapAction
 				num += 2000;
 			}
 		}
-		goto IL_0c12;
-		IL_0c12:
 		return num;
 	}
 

@@ -55,32 +55,19 @@ public class StealCoins : GoapAction
 		else if (target is Character target2)
 		{
 			string opinionLabel = actor.relationshipContainer.GetOpinionLabel(target2);
-			if (actor.moodComponent.moodState != MOOD_STATE.Normal)
+			if (actor.moodComponent.moodState == MOOD_STATE.Normal || opinionLabel == "Acquaintance" || opinionLabel == "Friend" || opinionLabel == "Close Friend")
 			{
-				switch (opinionLabel)
-				{
-				case "Acquaintance":
-				case "Friend":
-				case "Close Friend":
-					break;
-				default:
-					goto IL_00c4;
-				}
+				num += 2000;
 			}
-			num += 2000;
+			else if (actor.moodComponent.moodState == MOOD_STATE.Bad)
+			{
+				num += Utilities.Rng.Next(500, 601);
+			}
+			else if (actor.moodComponent.moodState == MOOD_STATE.Critical)
+			{
+				num += Utilities.Rng.Next(120, 201);
+			}
 		}
-		goto IL_010d;
-		IL_00c4:
-		if (actor.moodComponent.moodState == MOOD_STATE.Bad)
-		{
-			num += Utilities.Rng.Next(500, 601);
-		}
-		else if (actor.moodComponent.moodState == MOOD_STATE.Critical)
-		{
-			num += Utilities.Rng.Next(120, 201);
-		}
-		goto IL_010d;
-		IL_010d:
 		return num;
 	}
 
