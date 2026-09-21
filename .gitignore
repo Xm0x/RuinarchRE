@@ -1,0 +1,30 @@
+# --- Copyrighted game content: NEVER commit ---
+# The original binaries stay on your machine only. The repo ships scripts that
+# regenerate the baseline from a legit local install.
+*.dll
+*.exe
+*.assets
+*.resource
+*.resS
+reference/           # raw ilspycmd baseline (regenerate via tools/decompile.sh)
+
+# --- Build artifacts ---
+bin/
+obj/
+*.user
+*.suo
+
+# --- Ghidra ---
+*.rep/
+*.gpr
+native/**/*.rep/
+
+# --- Editor / OS ---
+.vs/
+.vscode/
+.idea/
+*.swp
+.DS_Store
+
+# Allow-list: keep our own committed source even though *.dll is ignored above
+!src/**/*.cs
