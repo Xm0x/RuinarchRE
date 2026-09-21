@@ -2,9 +2,9 @@
 
 DISCLAIMER: For %100 honesty, help of AI was used in this project.
 
-A 100% reverse-engineering and source-restoration project for **Ruinarch**
-(Maya Games). The goal is a clean, organized, documented, **recompilable** C#
-source tree that rebuilds the game and drops back in.
+A 100% reverse-engineering and source-restoration project for **Ruinarch**. The
+goal is a clean, organized, documented, **recompilable** C# source tree that
+rebuilds the game and drops back in.
 
 > **Legal:** this repo ships no game binaries. It contains only reverse-
 > engineering scripts, our own reconstructed and annotated source, and docs.
