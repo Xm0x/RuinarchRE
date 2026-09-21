@@ -1,0 +1,19 @@
+public enum Game_Alert
+{
+	Retaliation,
+	Upgrade_Portal,
+	Release_Powers,
+	Pause_Reminder,
+	Trigger_Flaw,
+	Chaos_Orbs,
+	Build_Spire,
+	Build_Prison,
+	Build_Watcher,
+	Build_Imp_Hut_Or_Crypt,
+	Apply_Affliction,
+	Cultists,
+	Devastation_Ritual_Alert,
+	Faction_Aware_Alert,
+	Spawn_Defensive_Units,
+	Mummified_Release_Alert
+}

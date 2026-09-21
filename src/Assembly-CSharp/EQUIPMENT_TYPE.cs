@@ -1,0 +1,6 @@
+public enum EQUIPMENT_TYPE
+{
+	WEAPON,
+	ARMOR,
+	ACCESSORY
+}

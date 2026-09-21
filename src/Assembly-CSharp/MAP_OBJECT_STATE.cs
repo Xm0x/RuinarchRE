@@ -1,0 +1,6 @@
+public enum MAP_OBJECT_STATE
+{
+	BUILT,
+	UNBUILT,
+	BUILDING
+}

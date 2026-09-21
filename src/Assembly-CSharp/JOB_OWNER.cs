@@ -1,0 +1,7 @@
+public enum JOB_OWNER
+{
+	CHARACTER,
+	SETTLEMENT,
+	FACTION,
+	PARTY
+}

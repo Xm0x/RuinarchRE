@@ -1,0 +1,7 @@
+public enum GOAP_PLAN_STATE
+{
+	IN_PROGRESS,
+	SUCCESS,
+	FAILED,
+	CANCELLED
+}

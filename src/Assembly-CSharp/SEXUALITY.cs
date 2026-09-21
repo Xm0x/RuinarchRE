@@ -1,0 +1,6 @@
+public enum SEXUALITY
+{
+	STRAIGHT,
+	BISEXUAL,
+	GAY
+}

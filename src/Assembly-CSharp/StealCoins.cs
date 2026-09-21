@@ -1,0 +1,170 @@
+using System.Collections.Generic;
+using UnityEngine;
+using UtilityScripts;
+
+public class StealCoins : GoapAction
+{
+	public StealCoins()
+		: base(INTERACTION_TYPE.STEAL_COINS)
+	{
+		base.actionIconString = GoapActionStateDB.Steal_Icon;
+		base.logTags = new LOG_TAG[1] { LOG_TAG.Crimes };
+		base.doesNotStopTargetCharacter = true;
+	}
+
+	public override bool ShouldActionBeAnIntel(ActualGoapNode node)
+	{
+		return true;
+	}
+
+	protected override void ConstructBasePreconditionsAndEffects()
+	{
+		AddPossibleExpectedEffectForTypeAndTargetMatching(new GoapEffectConditionTypeAndTargetType(GOAP_EFFECT_CONDITION.HAS_POI, GOAP_EFFECT_TARGET.ACTOR));
+		AddPossibleExpectedEffectForTypeAndTargetMatching(new GoapEffectConditionTypeAndTargetType(GOAP_EFFECT_CONDITION.HAPPINESS_RECOVERY, GOAP_EFFECT_TARGET.ACTOR));
+	}
+
+	protected override List<GoapEffect> GetExpectedEffects(Character actor, IPointOfInterest target, OtherData[] otherData, out bool isOverridden)
+	{
+		List<GoapEffect> list = RuinarchListPool<GoapEffect>.Claim(4);
+		AddBaseExpectedEffectsToList(list);
+		if (actor.traitContainer.HasTrait("Kleptomaniac"))
+		{
+			list.Add(InteractionManager.Instance.GetGoapEffectData(GOAP_EFFECT_CONDITION.HAPPINESS_RECOVERY, string.Empty, p_isKeyANumber: false, GOAP_EFFECT_TARGET.ACTOR));
+		}
+		isOverridden = true;
+		return list;
+	}
+
+	public override void Perform(ActualGoapNode goapNode)
+	{
+		base.Perform(goapNode);
+		SetState("Steal Success", goapNode);
+	}
+
+	protected override int GetBaseCost(Character actor, IPointOfInterest target, JobQueueItem job, OtherData[] otherData)
+	{
+		if (actor.traitContainer.HasTrait("Enslaved") && (target.gridTileLocation == null || !target.gridTileLocation.IsInHomeOf(actor)))
+		{
+			return 2000;
+		}
+		int num = Utilities.Rng.Next(300, 351);
+		if (actor.traitContainer.HasTrait("Kleptomaniac"))
+		{
+			num = Utilities.Rng.Next(90, 151);
+		}
+		else if (target is Character target2)
+		{
+			string opinionLabel = actor.relationshipContainer.GetOpinionLabel(target2);
+			if (actor.moodComponent.moodState != MOOD_STATE.Normal)
+			{
+				switch (opinionLabel)
+				{
+				case "Acquaintance":
+				case "Friend":
+				case "Close Friend":
+					break;
+				default:
+					goto IL_00c4;
+				}
+			}
+			num += 2000;
+		}
+		goto IL_010d;
+		IL_00c4:
+		if (actor.moodComponent.moodState == MOOD_STATE.Bad)
+		{
+			num += Utilities.Rng.Next(500, 601);
+		}
+		else if (actor.moodComponent.moodState == MOOD_STATE.Critical)
+		{
+			num += Utilities.Rng.Next(120, 201);
+		}
+		goto IL_010d;
+		IL_010d:
+		return num;
+	}
+
+	public override GoapActionInvalidity IsInvalid(ActualGoapNode node)
+	{
+		string stateName = "Target Missing";
+		GoapActionInvalidity invalidity = node.invalidity;
+		invalidity.isInvalid = false;
+		invalidity.stateName = stateName;
+		invalidity.reason = string.Empty;
+		return invalidity;
+	}
+
+	public override void PopulateEmotionReactionsToActor(List<EMOTION> reactions, Character actor, IPointOfInterest target, Character witness, ActualGoapNode node, REACTION_STATUS status)
+	{
+		base.PopulateEmotionReactionsToActor(reactions, actor, target, witness, node, status);
+		if (!witness.traitContainer.HasTrait("Demon Cultist"))
+		{
+			reactions.Add(EMOTION.Disapproval);
+			if (witness.relationshipContainer.IsFriendsWith(actor))
+			{
+				reactions.Add(EMOTION.Disappointment);
+				reactions.Add(EMOTION.Shock);
+			}
+		}
+		else if (witness == target || (target is TileObject tileObject && tileObject.IsOwnedBy(witness)))
+		{
+			reactions.Add(EMOTION.Betrayal);
+		}
+	}
+
+	public override void PopulateEmotionReactionsOfTarget(List<EMOTION> reactions, Character actor, IPointOfInterest target, ActualGoapNode node, REACTION_STATUS status)
+	{
+		base.PopulateEmotionReactionsOfTarget(reactions, actor, target, node, status);
+		if (target is Character character)
+		{
+			reactions.Add(EMOTION.Disappointment);
+			if (character.traitContainer.HasTrait("Hothead") || Random.Range(0, 100) < 35)
+			{
+				reactions.Add(EMOTION.Anger);
+			}
+		}
+	}
+
+	public override REACTABLE_EFFECT GetReactableEffect(ActualGoapNode node, Character witness)
+	{
+		return REACTABLE_EFFECT.Negative;
+	}
+
+	public override CRIME_TYPE GetCrimeType(Character actor, IPointOfInterest target, ActualGoapNode crime)
+	{
+		return CRIME_TYPE.Theft;
+	}
+
+	public override CRIME_TYPE GetRawCrimeType(Character actor)
+	{
+		return CRIME_TYPE.Theft;
+	}
+
+	protected override bool AreRequirementsSatisfied(Character actor, IPointOfInterest poiTarget, OtherData[] otherData, JobQueueItem job)
+	{
+		if (base.AreRequirementsSatisfied(actor, poiTarget, otherData, job))
+		{
+			Character character = poiTarget as Character;
+			if (actor != character)
+			{
+				return character.moneyComponent.HasCoins();
+			}
+		}
+		return false;
+	}
+
+	public void AfterStealSuccess(ActualGoapNode goapNode)
+	{
+		int num = 0;
+		if (goapNode.poiTarget is Character character)
+		{
+			num = character.moneyComponent.coins;
+			character.moneyComponent.AdjustCoins(-num);
+		}
+		goapNode.actor.moneyComponent.AdjustCoins(num);
+		if (goapNode.actor.traitContainer.HasTrait("Kleptomaniac"))
+		{
+			goapNode.actor.needsComponent.AdjustHappiness(10f);
+		}
+	}
+}

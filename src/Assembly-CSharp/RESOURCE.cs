@@ -1,0 +1,10 @@
+public enum RESOURCE
+{
+	FOOD,
+	WOOD,
+	STONE,
+	METAL,
+	NONE,
+	CLOTH,
+	LEATHER
+}

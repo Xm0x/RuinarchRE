@@ -1,0 +1,9 @@
+public enum ABILITY_TAG
+{
+	NONE,
+	MAGIC,
+	SUPPORT,
+	DEBUFF,
+	CRIME,
+	PHYSICAL
+}

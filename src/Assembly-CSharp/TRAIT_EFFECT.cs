@@ -1,0 +1,6 @@
+public enum TRAIT_EFFECT
+{
+	NEUTRAL,
+	POSITIVE,
+	NEGATIVE
+}

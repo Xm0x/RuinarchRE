@@ -1,0 +1,6 @@
+public enum CHARACTER_STATE
+{
+	NONE = 0,
+	STROLL_OUTSIDE = 5,
+	COMBAT = 6
+}

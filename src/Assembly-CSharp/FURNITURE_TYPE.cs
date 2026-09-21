@@ -1,0 +1,8 @@
+public enum FURNITURE_TYPE
+{
+	NONE,
+	BED,
+	TABLE,
+	DESK,
+	GUITAR
+}

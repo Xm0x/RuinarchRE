@@ -1,0 +1,5 @@
+public enum ATTACK_TYPE
+{
+	PHYSICAL,
+	MAGICAL
+}

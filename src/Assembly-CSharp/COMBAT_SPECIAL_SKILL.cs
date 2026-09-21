@@ -1,0 +1,28 @@
+public enum COMBAT_SPECIAL_SKILL
+{
+	None,
+	Heal,
+	Taunt,
+	Fast_Heal,
+	Strong_Heal,
+	Group_Heal,
+	Self_Heal,
+	Slow_Taunt,
+	Max_Heal,
+	Elemental_Protection,
+	Stoneskin,
+	Sharpen,
+	Thorns,
+	Summon_Wolf,
+	Summon_Bear,
+	Battle_Cry,
+	Endure,
+	Blitz,
+	Cleanse,
+	Pierce,
+	Shield,
+	Wind_Slice,
+	Siege_Arrows,
+	Polymorph,
+	Turn_To_Stone
+}

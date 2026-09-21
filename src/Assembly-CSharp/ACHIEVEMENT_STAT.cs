@@ -1,0 +1,5 @@
+public enum ACHIEVEMENT_STAT
+{
+	NONE,
+	STAT_VILLAGER_KILLS
+}

@@ -1,0 +1,34 @@
+namespace Traits;
+
+public class Arsonist : Trait
+{
+	public override bool isSingleton => true;
+
+	public Arsonist()
+	{
+		name = "Arsonist";
+		description = "Burns down nearest Village or occupied Special Structure.";
+		type = TRAIT_TYPE.NEUTRAL;
+		effect = TRAIT_EFFECT.NEUTRAL;
+		ticksDuration = 0;
+		isHidden = true;
+	}
+
+	public override void OnAddTrait(ITraitable addedTo)
+	{
+		base.OnAddTrait(addedTo);
+		if (addedTo is Character character)
+		{
+			character.behaviourComponent.UpdateDefaultBehaviourSet();
+		}
+	}
+
+	public override void OnRemoveTrait(ITraitable removedFrom, Character removedBy)
+	{
+		base.OnRemoveTrait(removedFrom, removedBy);
+		if (removedFrom is Character character)
+		{
+			character.behaviourComponent.UpdateDefaultBehaviourSet();
+		}
+	}
+}

@@ -1,0 +1,19 @@
+public enum FACTION_TYPE
+{
+	None,
+	Elven_Kingdom,
+	Human_Empire,
+	Demons,
+	Vagrants,
+	Wild_Monsters,
+	Bandits,
+	Undead,
+	Disguised,
+	Vampire_Clan,
+	Lycan_Clan,
+	Demon_Cult,
+	Ratmen,
+	Retaliator,
+	Divine_Church,
+	Wiccans
+}

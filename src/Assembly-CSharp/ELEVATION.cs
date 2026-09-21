@@ -1,0 +1,7 @@
+public enum ELEVATION
+{
+	PLAIN,
+	MOUNTAIN,
+	WATER,
+	TREES
+}

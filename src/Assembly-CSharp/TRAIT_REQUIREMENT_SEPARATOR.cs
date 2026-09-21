@@ -1,0 +1,5 @@
+public enum TRAIT_REQUIREMENT_SEPARATOR
+{
+	OR,
+	AND
+}

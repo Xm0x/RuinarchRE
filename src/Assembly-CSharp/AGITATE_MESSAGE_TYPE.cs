@@ -1,0 +1,24 @@
+public enum AGITATE_MESSAGE_TYPE
+{
+	Agitate_Success,
+	Incapacitated,
+	Special_1,
+	Special_2,
+	Tooltip,
+	Abduct_Wrong_Time,
+	No_Home,
+	No_Path_Outside,
+	Cant_Agitate_Agitated,
+	Attack_Villager_No_Target,
+	Mesmerize_No_Target,
+	Hunt_No_Target,
+	Abduct_Character_No_Target,
+	Seduce_Male_No_Target,
+	Seduce_Female_No_Target,
+	Broodmother_No_Target,
+	Reanimate_Corpse_No_Target,
+	Attack_Villager_Tooltip,
+	Abduct_Villager_Tooltip,
+	Mesmerize_Villager_Tooltip,
+	Abduct_No_Home
+}

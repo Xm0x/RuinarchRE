@@ -1,0 +1,28 @@
+public enum FACTION_IDEOLOGY
+{
+	Inclusive,
+	Exclusive,
+	Warmonger,
+	Peaceful,
+	Divine_Worship,
+	Nature_Worship,
+	Demon_Worship,
+	Reveres_Vampires,
+	Reveres_Werewolves,
+	Hates_Vampires,
+	Hates_Werewolves,
+	Bone_Golem_Makers,
+	Raiders,
+	Wyvern_Tamers,
+	Tower_Defense,
+	Lightning_Tower_Defense,
+	Breeders,
+	Entkin,
+	Golem_Makers,
+	Blood_Sacrifices,
+	Mage_Guild,
+	Necromantic,
+	Beastmasters,
+	Infested,
+	Slavers
+}

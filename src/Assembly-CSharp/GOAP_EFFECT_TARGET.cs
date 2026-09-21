@@ -1,0 +1,5 @@
+public enum GOAP_EFFECT_TARGET
+{
+	ACTOR,
+	TARGET
+}

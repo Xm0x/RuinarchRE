@@ -1,0 +1,25 @@
+public enum CRIME_TYPE
+{
+	Unset,
+	None,
+	Infidelity,
+	Disturbances,
+	Rumormongering,
+	Kidnapping,
+	Theft,
+	Assault,
+	Attempted_Murder,
+	Murder,
+	Arson,
+	Demon_Worship,
+	Divine_Worship,
+	Nature_Worship,
+	Aberration,
+	Cannibalism,
+	Plagued,
+	Animal_Killing,
+	Vampire,
+	Werewolf,
+	Treason,
+	Trespassing
+}

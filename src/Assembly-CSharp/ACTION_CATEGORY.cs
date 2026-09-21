@@ -1,0 +1,7 @@
+public enum ACTION_CATEGORY
+{
+	DIRECT,
+	INDIRECT,
+	CONSUME,
+	VERBAL
+}

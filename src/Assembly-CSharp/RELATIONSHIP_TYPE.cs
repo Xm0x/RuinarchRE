@@ -1,0 +1,13 @@
+public enum RELATIONSHIP_TYPE
+{
+	NONE = 0,
+	RELATIVE = 3,
+	LOVER = 4,
+	AFFAIR = 5,
+	EX_LOVER = 10,
+	SIBLING = 11,
+	PARENT = 12,
+	CHILD = 13,
+	MASTER = 14,
+	PET = 15
+}

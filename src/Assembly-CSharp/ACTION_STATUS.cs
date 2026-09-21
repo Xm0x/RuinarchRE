@@ -1,0 +1,8 @@
+public enum ACTION_STATUS
+{
+	NONE,
+	STARTED,
+	PERFORMING,
+	SUCCESS,
+	FAIL
+}

@@ -1,0 +1,5 @@
+public enum POINT_OF_INTEREST_TYPE
+{
+	CHARACTER,
+	TILE_OBJECT
+}

@@ -1,0 +1,7 @@
+public enum PILLAGE_ACTION
+{
+	OBTAIN_ITEM,
+	END,
+	CIVILIAN_DIES,
+	NOTHING
+}

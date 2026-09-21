@@ -1,0 +1,29 @@
+namespace Factions.Faction_Types;
+
+public class Disguised : FactionType
+{
+	public override RESOURCE mainResource => RESOURCE.WOOD;
+
+	public Disguised()
+		: base(FACTION_TYPE.Disguised)
+	{
+	}
+
+	public Disguised(SaveDataFactionType saveData)
+		: base(FACTION_TYPE.Disguised, saveData)
+	{
+	}
+
+	public override void SetAsDefault(Faction p_faction)
+	{
+	}
+
+	public override void SetFixedData()
+	{
+	}
+
+	public override CRIME_SEVERITY GetDefaultSeverity(CRIME_TYPE crimeType)
+	{
+		return CRIME_SEVERITY.Unapplicable;
+	}
+}

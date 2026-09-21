@@ -1,0 +1,24 @@
+public enum EQUIPMENT_BONUS
+{
+	Increased_Piercing,
+	Increased_3_Random_Resistance,
+	Increased_4_Random_Resistance,
+	Increased_5_Random_Resistance,
+	Max_HP_Percentage,
+	Max_HP_Actual,
+	Str_Percentage,
+	Str_Actual,
+	Attack_Element,
+	Slayer_Bonus,
+	Ward_Bonus,
+	Flight,
+	Int_Percentage,
+	Int_Actual,
+	Crit_Rate_Actual,
+	Random_Ward_Bonus,
+	Random_Slayer_Bonus,
+	None,
+	Mental_Resistance,
+	Secondary_Resistances,
+	Normal_Resistance
+}

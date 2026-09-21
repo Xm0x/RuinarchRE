@@ -1,0 +1,7 @@
+public enum TRAIT_TYPE
+{
+	STATUS,
+	BUFF,
+	FLAW,
+	NEUTRAL
+}
