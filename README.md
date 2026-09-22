@@ -25,7 +25,9 @@ tools/decompile.sh    # regenerate reference/ from your local install
 tools/seed-src.sh     # first time: seed src/ from the baseline
 ```
 
-Edit `tools/env.sh` if your Ruinarch install path differs.
+`tools/env.sh` resolves your install path (export `RUIN_GAME_DIR` to override the default).
+For IDE use, `tools/fix-csproj-paths.sh` wires the `.csproj` files to your local `Managed/`
+dir; `tools/build.sh` itself needs nothing extra.
 
 ## Status
 

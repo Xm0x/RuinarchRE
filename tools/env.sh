@@ -3,7 +3,9 @@
 # Source this from other scripts: `source "$(dirname "$0")/env.sh"`
 
 # --- Game install (source of truth, never committed) ---
-export RUIN_GAME_DIR="/home/user/.local/share/Steam/steamapps/common/Ruinarch"
+# Set RUIN_GAME_DIR in your environment, or edit the default below:
+#export RUIN_GAME_DIR="/path/to/Steam/steamapps/common/Ruinarch"
+export RUIN_GAME_DIR="${RUIN_GAME_DIR:-$HOME/.local/share/Steam/steamapps/common/Ruinarch}"
 export RUIN_DATA_DIR="$RUIN_GAME_DIR/Ruinarch_Data"
 export RUIN_MANAGED_DIR="$RUIN_DATA_DIR/Managed"
 

@@ -39,3 +39,6 @@ reference_build.log
 
 # Allow-list: keep our own committed source even though *.dll is ignored above
 !src/**/*.cs
+
+# machine-local IDE path injection (tools/fix-csproj-paths.sh)
+src/Directory.Build.props
