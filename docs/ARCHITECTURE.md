@@ -99,17 +99,17 @@ always keeping behavior identical and diffable against `reference/`.
 
 ## 6. Milestone ladder ("100%" defined)
 
-- **M0: Baseline** ✅ reproducible raw export of both assemblies.
-- **M1: Compiles**: `src/Assembly-CSharp` + `firstpass` build to DLLs with 0
+- **M0: Baseline** ✅: reproducible raw export of both assemblies.
+- **M1: Compiles** ✅: `src/Assembly-CSharp` + `firstpass` build to DLLs with 0
   errors, then push to GitHub.
-- **M2: Drop-in runs**: our DLLs replace the originals; game boots to main menu
+- **M2: Drop-in runs** ✅: our DLLs replace the originals; game boots to main menu
   and starts a world.
-- **M3: Behavior-verified**: play a full scenario (spawn, jobs, combat,
+- **M3: Behavior-verified** ✅: play a full scenario (spawn, jobs, combat,
   save/load) with no divergence from stock.
-- **M4: Documented**: every major system in §3 has a `docs/systems/*.md`.
-- **M5: Clean source**: names/comments restored to human-authored quality; tree
+- **M4: Documented** ✅: every major system in §3 has a `docs/systems/*.md`.
+- **M5: Clean source** ✅: names/comments restored to human-authored quality; tree
   reads like the original repo would.
-- **M6: Mod loader**: shipped as its own project,
+- **M6: Mod loader** ✅: shipped as its own project,
   [RuinarchModLoader](https://github.com/Xm0x/RuinarchModLoader) (a patcher that
   installs a Harmony-based loader into the game's own assembly).
 
