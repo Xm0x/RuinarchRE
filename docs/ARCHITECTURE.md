@@ -67,8 +67,7 @@ tools/seed-src.sh    # first-time: copy reference -> src for cleanup work
 Progress metric: `types compiling / total types`.
 
 ### Track B: Comprehension (understand it)
-Per-system deep dives in `docs/systems/`, driven by curiosity and by whatever
-Track A surfaces. Candidate systems, roughly in dependency order:
+Per-system deep dives in `docs/systems/`, roughly in dependency order:
 - Core loop: `GameManager`, `Messenger` event bus, tick/scheduling.
 - Character AI: `*Behaviour` classes, `behaviourComponent`, job system
   (`JobQueueItem`, `jobComponent`), GOAP.
@@ -92,26 +91,29 @@ always keeping behavior identical and diffable against `reference/`.
 - `[assembly:]` attributes / InternalsVisibleTo: restore from metadata.
 - Init-only + `record` lowering on newer C#: pin `<LangVersion>` in the csproj.
 
-## 5. Later tracks (post-build)
+## 5. Assets
 
-- **Asset extraction** (AssetStudio/AssetRipper) to recover prefabs, sprites,
-  ScriptableObject data, reconstructing the *content* the code drives.
+The code does not include art, audio or data. `tools/extract-assets.sh` extracts
+them from your own install (prefabs, sprites, ScriptableObject data); see
+[`docs/systems/ASSETS.md`](systems/ASSETS.md). Extracted assets are never committed.
 
 ## 6. Milestone ladder ("100%" defined)
 
-- **M0: Baseline** ✅: reproducible raw export of both assemblies.
-- **M1: Compiles** ✅: `src/Assembly-CSharp` + `firstpass` build to DLLs with 0
-  errors, then push to GitHub.
-- **M2: Drop-in runs** ✅: our DLLs replace the originals; game boots to main menu
+- **M0: Baseline**: reproducible raw export of both assemblies.
+- **M1: Compiles**: `src/Assembly-CSharp` + `firstpass` build to DLLs with 0
+  errors.
+- **M2: Drop-in runs**: our DLLs replace the originals; game boots to main menu
   and starts a world.
 - **M3: Behavior-verified** ✅: play a full scenario (spawn, jobs, combat,
   save/load) with no divergence from stock.
-- **M4: Documented** ✅: every major system in §3 has a `docs/systems/*.md`.
-- **M5: Clean source** ✅: names/comments restored to human-authored quality; tree
-  reads like the original repo would.
-- **M6: Mod loader** ✅: shipped as its own project,
+- **M4: Documented**: every major system in §3 has a `docs/systems/*.md`.
+- **M5: Workable source**: structured control flow and an edit/build/run loop
+  ([`docs/MODDING.md`](MODDING.md)). Local variable names are still the
+  decompiler's; they are renamed per method as code is touched.
+- **M6: Mod loader**: shipped as its own project,
   [RuinarchModLoader](https://github.com/Xm0x/RuinarchModLoader) (a patcher that
   installs a Harmony-based loader into the game's own assembly).
 
 "100% RE" = **M3 + M4** (functionally-equivalent buildable source plus full
-system docs). M5 is the polish pass; M6 (a separate project) makes it moddable.
+system docs). M5 makes it practical to work on; M6 (a separate project) makes it
+moddable.

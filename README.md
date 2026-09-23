@@ -1,6 +1,6 @@
 # RuinarchRE
 
-DISCLAIMER: For %100 honesty, help of AI was used in this project.
+Disclaimer: AI tools were used in this project.
 
 A reverse-engineering / source-restoration project for **Ruinarch**: all 4980
 code types decompiled into a clean, organized, documented, **recompilable** C#
@@ -54,7 +54,8 @@ It ships a patcher that installs a mod loader into your own `Assembly-CSharp.dll
 (stock game or this rebuild), with [Harmony](https://github.com/pardeike/Harmony)
 runtime patching. Keeping it separate keeps this repo focused on faithful source
 restoration. Because the game's names are intact here, this source is the
-reference a modder reads to find exactly what to patch.
+reference a modder reads to find exactly what to patch. Mods built this way live in
+**[RuinarchMods](https://github.com/Xm0x/RuinarchMods)**.
 
 See [`docs/ARCHITECTURE.md`](docs/ARCHITECTURE.md) for the full strategy,
 toolchain, and milestone definitions.

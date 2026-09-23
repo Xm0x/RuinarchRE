@@ -3,6 +3,10 @@
 The source in `src/` is the real, recompilable game code. This is the loop for
 changing it and seeing your change in-game.
 
+> To write a **mod** (a DLL that changes the stock game at runtime), use
+> [RuinarchModLoader](https://github.com/Xm0x/RuinarchModLoader) instead; this page is
+> about working on the decompiled source itself.
+
 ## The loop
 
 ```
