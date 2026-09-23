@@ -1,6 +1,6 @@
 # RuinarchRE
 
-Disclaimer: AI tools were used in this project.
+DISCLAIMER: For 100% honesty, help of AI was used in this project.
 
 A reverse-engineering / source-restoration project for **Ruinarch**: all 4980
 code types decompiled into a clean, organized, documented, **recompilable** C#

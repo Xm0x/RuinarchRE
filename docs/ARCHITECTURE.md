@@ -99,18 +99,18 @@ them from your own install (prefabs, sprites, ScriptableObject data); see
 
 ## 6. Milestone ladder ("100%" defined)
 
-- **M0: Baseline**: reproducible raw export of both assemblies.
-- **M1: Compiles**: `src/Assembly-CSharp` + `firstpass` build to DLLs with 0
+- **M0: Baseline** ✅: reproducible raw export of both assemblies.
+- **M1: Compiles** ✅: `src/Assembly-CSharp` + `firstpass` build to DLLs with 0
   errors.
-- **M2: Drop-in runs**: our DLLs replace the originals; game boots to main menu
+- **M2: Drop-in runs** ✅: our DLLs replace the originals; game boots to main menu
   and starts a world.
 - **M3: Behavior-verified** ✅: play a full scenario (spawn, jobs, combat,
   save/load) with no divergence from stock.
-- **M4: Documented**: every major system in §3 has a `docs/systems/*.md`.
-- **M5: Workable source**: structured control flow and an edit/build/run loop
+- **M4: Documented** ✅: every major system in §3 has a `docs/systems/*.md`.
+- **M5: Workable source** ✅: structured control flow and an edit/build/run loop
   ([`docs/MODDING.md`](MODDING.md)). Local variable names are still the
   decompiler's; they are renamed per method as code is touched.
-- **M6: Mod loader**: shipped as its own project,
+- **M6: Mod loader** ✅: shipped as its own project,
   [RuinarchModLoader](https://github.com/Xm0x/RuinarchModLoader) (a patcher that
   installs a Harmony-based loader into the game's own assembly).
 
