@@ -13,10 +13,6 @@ in the `.assets` files), and local variable names inside methods are still
 decompiler-generated. The recovered names are types, methods, fields, and
 namespaces.
 
-> **Legal:** this repo ships no game binaries. It contains only reverse-
-> engineering scripts, our own reconstructed and annotated source, and docs.
-> You must own a legitimate copy of Ruinarch to regenerate the baseline.
-
 ## Quick start
 
 ```bash
