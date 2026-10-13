@@ -1,0 +1,15 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="192" viewBox="0 0 1200 192" role="img" aria-labelledby="title desc">
+  <title id="title">Ruinarch source entry points</title>
+  <desc id="desc">Real files in src/Assembly-CSharp: GameManager.cs, Character.cs and Inner_Maps/LocationGridTile.cs.</desc>
+  <style>
+    /* Hallmark · macrostructure: Long Document · tone: technical · enrichment: source paths
+       Pre-emit critique: P5 H5 E4 S5 R5 V4 */
+    :root { --fg: oklch(24% 0.008 70); --muted: oklch(47% 0.008 70); --font-mono: ui-monospace, monospace; }
+    @media (prefers-color-scheme: dark) { :root { --fg: oklch(92% 0.008 70); --muted: oklch(74% 0.008 70); } }
+    text { font-family: var(--font-mono); font-size: 32px; fill: var(--fg); }
+  </style>
+  <text x="24" y="40" fill="var(--muted)">src/Assembly-CSharp/</text>
+  <text x="64" y="88">GameManager.cs</text>
+  <text x="64" y="132">Character.cs</text>
+  <text x="64" y="176">Inner_Maps/LocationGridTile.cs</text>
+</svg>

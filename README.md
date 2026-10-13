@@ -1,29 +1,55 @@
 # RuinarchRE
 
-DISCLAIMER: For 100% honesty, help of AI was used in this project.
+Ruinarch's managed game logic, decompiled into readable, buildable C#. Use this
+repository to trace character AI, world state and save/load behavior before
+writing a mod.
 
-A reverse-engineering / source-restoration project for **Ruinarch**: all 4980
-code types decompiled into a clean, organized, documented, **recompilable** C#
-tree that rebuilds the game and boots it (drop-in verified, playtested).
+[Systems](docs/systems/README.md) · [Architecture](docs/ARCHITECTURE.md) · [Runtime mods](https://github.com/Xm0x/RuinarchModLoader)
 
-This is 100% of the game's *code*, in the sense defined in
-[`docs/ARCHITECTURE.md`](docs/ARCHITECTURE.md): buildable, behavior-verified
-source plus system docs. It is not asset extraction (art, audio, and data live
-in the `.assets` files), and local variable names inside methods are still
-decompiler-generated. The recovered names are types, methods, fields, and
-namespaces.
+## Start with the behavior
 
-## Quick start
+| Investigating | Read first |
+|---|---|
+| Time, signals or startup | [Core loop](docs/systems/CORE_LOOP.md) |
+| A character's choice or interrupted job | [Character AI and jobs](docs/systems/CHARACTER_AI_JOBS.md) |
+| Tiles, buildings, settlements or factions | [World model](docs/systems/WORLD_MODEL.md) |
+| A save that loads differently | [Save format](docs/systems/SAVE_FORMAT.md) |
+| Prefabs, sprites or scene data | [Assets](docs/systems/ASSETS.md) |
+
+Each guide maps the system to real decompiled types under `src/Assembly-CSharp/`. Names of types, methods, fields and namespaces survive in the original metadata; local variable names often remain decompiler-generated.
+
+## What is restored
+
+The documented baseline contains **4,980 code types**, a compilable source tree and major-system documentation. Its recorded milestones include a rebuilt DLL reaching the main menu and a played behavior-verification scenario.
+
+That is the project's defined code-restoration scope, **not proof of every possible gameplay path**. Art, audio and serialized content live in the game's `.assets` files and are not part of the recovered C# tree. See the [milestone definitions](docs/ARCHITECTURE.md) for the exact meaning of completion.
+
+<p><img src="./assets/readme/source-reference.svg" width="100%" alt="Source examples under src/Assembly-CSharp: GameManager.cs, Character.cs and Inner_Maps/LocationGridTile.cs"></p>
+
+## Work from your own installation
+
+Requires your own Ruinarch installation and the toolchain described in [Architecture](docs/ARCHITECTURE.md). Override the install path when needed:
 
 ```bash
-tools/setup.sh        # ensure ilspycmd is installed
-tools/decompile.sh    # regenerate reference/ from your local install
-tools/seed-src.sh     # first time: seed src/ from the baseline
+export RUIN_GAME_DIR="/path/to/Ruinarch"
+tools/setup.sh        # install/check ilspycmd
+tools/decompile.sh    # regenerate the raw reference/ baseline
+tools/seed-src.sh     # seed src/ only where it does not already exist
+tools/build.sh       # compile Assembly-CSharp into build/
 ```
 
-`tools/env.sh` resolves your install path (export `RUIN_GAME_DIR` to override the default).
-For IDE use, `tools/fix-csproj-paths.sh` wires the `.csproj` files to your local `Managed/`
-dir; `tools/build.sh` itself needs nothing extra.
+`tools/env.sh` resolves paths. For IDE use, `tools/fix-csproj-paths.sh` connects the project files to your local `Managed/` directory. Keep your restored-source changes in `src/`; `reference/` is the regenerable, gitignored baseline.
+
+| Path | Purpose |
+|---|---|
+| `src/` | Organized, buildable game source |
+| `docs/` | Architecture, workflow and system guides |
+| `tools/` | Decompile, build and verification scripts |
+| `reference/` | Raw local ILSpy export |
+| `tools/extract-assets.sh` | Optional extraction from your own game files |
+
+<details>
+<summary>Recorded restoration milestones</summary>
 
 ## Status
 
@@ -35,23 +61,14 @@ dir; `tools/build.sh` itself needs nothing extra.
 - [x] M5: structured control flow, edit/build/run dev loop ([docs/MODDING.md](docs/MODDING.md))
 - [x] M6: mod loader shipped as its own project ([RuinarchModLoader](https://github.com/Xm0x/RuinarchModLoader))
 
-| Path | What |
-|---|---|
-| `tools/` | decompile, build, and verify scripts |
-| `src/` | organized, buildable game source (the deliverable) |
-| `docs/` | architecture and per-system deep dives |
-| `reference/` | raw ilspycmd baseline (gitignored; regenerate locally) |
-| `tools/extract-assets.sh` | optional asset extraction (run on your own install) |
+</details>
 
-## Modding
+## Runtime modding belongs next door
 
-Modding lives in a separate project, **[RuinarchModLoader](https://github.com/Xm0x/RuinarchModLoader)**.
-It ships a patcher that installs a mod loader into your own `Assembly-CSharp.dll`
-(stock game or this rebuild), with [Harmony](https://github.com/pardeike/Harmony)
-runtime patching. Keeping it separate keeps this repo focused on faithful source
-restoration. Because the game's names are intact here, this source is the
-reference a modder reads to find exactly what to patch. Mods built this way live in
-**[RuinarchMods](https://github.com/Xm0x/RuinarchMods)**.
+Use **[RuinarchModLoader](https://github.com/Xm0x/RuinarchModLoader)** to install the loader startup call into your own game assembly, then apply Harmony patches at runtime. **[RuinarchMods](https://github.com/Xm0x/RuinarchMods)** contains the gameplay packages. Their normal deployment uses the stock game, not a replacement rebuilt game DLL.
 
-See [`docs/ARCHITECTURE.md`](docs/ARCHITECTURE.md) for the full strategy,
-toolchain, and milestone definitions.
+This repository stays focused on source restoration and serves as the reference for choosing patch targets. The separate [restoration edit/build/run workflow](docs/MODDING.md) documents source-development experiments.
+
+## Project notes
+
+AI assistance was used in this project. Ruinarch's original code and assets remain the property of their respective owners; this is an independent reverse-engineering project, not an official source release.

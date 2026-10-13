@@ -1,7 +1,10 @@
 # System deep-dives
 
-Reverse-engineered documentation of Ruinarch's major systems. Each maps the real
-decompiled types in `src/Assembly-CSharp/` to how the system actually works.
+**A navigation guide to Ruinarch's major systems.** Start with the observed behavior, then follow the named types in `src/Assembly-CSharp/`.
+
+[Repository](../../README.md) · [Architecture](../ARCHITECTURE.md) · [Modding](../MODDING.md)
+
+## Choose an entry point
 
 | Doc | System |
 |---|---|
@@ -11,10 +14,10 @@ decompiled types in `src/Assembly-CSharp/` to how the system actually works.
 | [SAVE_FORMAT.md](SAVE_FORMAT.md) | `.zip` save layout, `SaveData<T>` tree, two-phase load, FullSerializer + SQLite-for-logs |
 | [ASSETS.md](ASSETS.md) | Where content lives (assets/resources/scenes) and how to extract it from your own install |
 
-Cross-cutting facts:
-- Everything the AI targets is an `IPointOfInterest` (`POI_TYPE`): characters,
-  tile objects, structures.
-- Every persistable object is an `ISavable` with a string `persistentID`: the
-  key that stitches the whole save graph back together.
-- Content is enum-driven: `JOB_TYPE` (229), `INTERACTION_TYPE` (~250),
-  `TILE_OBJECT_TYPE` (300+), `STRUCTURE_TYPE` (85+), `FACTION_TYPE`.
+## Identities that cross system boundaries
+
+- **Targets:** the AI acts on `IPointOfInterest` objects (`POI_TYPE`), including characters, tile objects and structures.
+- **Persistence:** an `ISavable` object's string `persistentID` joins it back to the saved object graph.
+- **Content:** enum-driven identifiers connect data to behaviors: `JOB_TYPE` (229), `INTERACTION_TYPE` (about 250), `TILE_OBJECT_TYPE` (300+), `STRUCTURE_TYPE` (85+) and `FACTION_TYPE`. These are baseline counts, not a modding extension contract.
+
+For a job that stops unexpectedly, begin with **Character AI and jobs**; inspect the tick and signal lifecycle in **Core loop**, then the object's ownership in **World model**. For a reload issue, start with **Save format** before assuming the live cache is durable saved state.
