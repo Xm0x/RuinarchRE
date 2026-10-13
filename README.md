@@ -24,8 +24,6 @@ The documented baseline contains **4,980 code types**, a compilable source tree 
 
 That is the project's defined code-restoration scope, **not proof of every possible gameplay path**. Art, audio and serialized content live in the game's `.assets` files and are not part of the recovered C# tree. See the [milestone definitions](docs/ARCHITECTURE.md) for the exact meaning of completion.
 
-<p><img src="./assets/readme/source-reference.svg" width="100%" alt="Source examples under src/Assembly-CSharp: GameManager.cs, Character.cs and Inner_Maps/LocationGridTile.cs"></p>
-
 ## Work from your own installation
 
 Requires your own Ruinarch installation and the toolchain described in [Architecture](docs/ARCHITECTURE.md). Override the install path when needed:
