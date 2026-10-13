@@ -1,18 +1,19 @@
 # System deep-dives
 
-**A navigation guide to Ruinarch's major systems.** Start with the observed behavior, then follow the named types in `src/Assembly-CSharp/`.
+Find the code behind an observed Ruinarch behavior. The guides below connect
+runtime systems to named types in `src/Assembly-CSharp/`.
 
 [Repository](../../README.md) · [Architecture](../ARCHITECTURE.md) · [Modding](../MODDING.md)
 
-## Choose an entry point
+## Start from the symptom
 
-| Doc | System |
+| Investigating | Guide and scope |
 |---|---|
-| [CORE_LOOP.md](CORE_LOOP.md) | Tick/time model, `Messenger` event bus, per-entity fan-out, GOAP entry, boot order |
-| [CHARACTER_AI_JOBS.md](CHARACTER_AI_JOBS.md) | Behaviour selection → Jobs → GOAP planning → action execution; Interrupts & Traits |
-| [WORLD_MODEL.md](WORLD_MODEL.md) | GridMap → Region → Area → InnerTileMap → LocationGridTile → TileObject; structures, settlements, factions |
-| [SAVE_FORMAT.md](SAVE_FORMAT.md) | `.zip` save layout, `SaveData<T>` tree, two-phase load, FullSerializer + SQLite-for-logs |
-| [ASSETS.md](ASSETS.md) | Where content lives (assets/resources/scenes) and how to extract it from your own install |
+| Startup, time or signal delivery | [Core loop](CORE_LOOP.md): tick/time model, `Messenger`, per-entity fan-out, GOAP entry and boot order |
+| A character's choice or interrupted job | [Character AI and jobs](CHARACTER_AI_JOBS.md): behavior selection, Jobs, GOAP planning, action execution, interrupts and traits |
+| A tile, building, settlement or faction | [World model](WORLD_MODEL.md): `GridMap`, `Region`, `Area`, `InnerTileMap`, `LocationGridTile`, `TileObject` and ownership |
+| A save that loads differently | [Save format](SAVE_FORMAT.md): ZIP layout, `SaveData<T>`, two-phase load, FullSerializer and SQLite logs |
+| Missing or unexpected visual content | [Assets](ASSETS.md): assets, resources, scenes and extraction from your own installation |
 
 ## Identities that cross system boundaries
 
@@ -20,4 +21,6 @@
 - **Persistence:** an `ISavable` object's string `persistentID` joins it back to the saved object graph.
 - **Content:** enum-driven identifiers connect data to behaviors: `JOB_TYPE` (229), `INTERACTION_TYPE` (about 250), `TILE_OBJECT_TYPE` (300+), `STRUCTURE_TYPE` (85+) and `FACTION_TYPE`. These are baseline counts, not a modding extension contract.
 
-For a job that stops unexpectedly, begin with **Character AI and jobs**; inspect the tick and signal lifecycle in **Core loop**, then the object's ownership in **World model**. For a reload issue, start with **Save format** before assuming the live cache is durable saved state.
+Follow a stopped job from **Character AI and jobs** to the tick and signal
+lifecycle in **Core loop**, then to ownership in **World model**. For reload
+differences, read **Save format** before treating a live cache as durable state.
